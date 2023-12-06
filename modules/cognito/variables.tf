@@ -1,3 +1,7 @@
+variable "namespace" {
+  type = string
+}
+
 variable "environment" {
   type = string
 }
@@ -23,7 +27,7 @@ variable "auth_domain" {
 }
 
 variable "backend_domain" {
-  description = "Backend domain name"
+  description = "Frontend domain name"
   type        = string
 }
 
@@ -44,10 +48,20 @@ variable "hmac_secret_key" {
   sensitive   = true
 }
 
-variable "github_access_token" {
+variable "certificate_arn" {
   type = string
 }
 
-variable "certificate_arn" {
-  type = string
+variable "allow_admin_create_user_only" {
+  type    = bool
+  default = true
+}
+
+variable "username_attributes" {
+  type    = list(string)
+  default = ["email"]
+}
+variable "auto_verified_attributes" {
+  type    = list(string)
+  default = []
 }

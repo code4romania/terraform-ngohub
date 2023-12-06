@@ -26,3 +26,8 @@ variable "frontend_domain" {
   type    = string
   default = null
 }
+
+variable "build_spec" {
+  type    = string
+  default = null
+}

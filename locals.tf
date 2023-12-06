@@ -13,6 +13,8 @@ locals {
   }
 
   ngohub = {
+    namespace = "ngohub-${var.environment}"
+
     auth = {
       domain = "auth${local.env_suffix}.${var.root_domain}"
     }

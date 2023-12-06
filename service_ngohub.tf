@@ -1,13 +1,12 @@
-module "ngohub" {
-  source = "./modules/ngohub"
+module "ngohub_cognito" {
+  source = "./modules/cognito"
 
+  namespace   = local.ngohub.namespace
   environment = var.environment
   region      = var.region
 
   root_domain  = var.root_domain
   email_domain = local.mail.domain
-
-  github_access_token = var.github_access_token
 
   certificate_arn = aws_acm_certificate.global.arn
 
@@ -17,12 +16,59 @@ module "ngohub" {
 
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
+
+  allow_admin_create_user_only = true
+  username_attributes          = ["email"]
+  auto_verified_attributes     = ["email"]
 }
 
-module "ecs_service" {
+module "ngohub_frontend" {
+  source = "./modules/amplify"
+
+  name        = "ngohub"
+  repository  = "https://github.com/code4romania/onghub"
+  branch      = "develop"
+  environment = var.environment
+
+  frontend_domain = local.ngohub.frontend.domain
+
+  github_access_token = var.github_access_token
+
+  environment_variables = {
+    AMPLIFY_MONOREPO_APP_ROOT      = "frontend"
+    REACT_APP_API_URL              = "https://${local.ngohub.backend.domain}"
+    REACT_APP_AWS_REGION           = var.region
+    REACT_APP_COGNITO_OAUTH_DOMAIN = module.ngohub_cognito.oauth_domain
+    REACT_APP_FRONTEND_URL         = "https://${local.ngohub.frontend.domain}"
+    REACT_APP_USER_POOL_CLIENT_ID  = module.ngohub_cognito.user_pool_client_id
+    REACT_APP_USER_POOL_ID         = module.ngohub_cognito.user_pool_id
+  }
+
+  build_spec = <<-EOT
+    version: 1
+    appRoot: frontend
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm ci
+        build:
+          commands:
+            - npm run build
+      artifacts:
+        baseDirectory: build
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
+  EOT
+}
+
+module "ngohub_backend" {
   source = "./modules/ecs-service"
 
-  name         = module.ngohub.namespace
+  name         = local.ngohub.namespace
   cluster_name = module.ecs_cluster.cluster_name
   min_capacity = 1
   max_capacity = 3
@@ -88,11 +134,11 @@ module "ecs_service" {
     },
     {
       name  = "COGNITO_CLIENT_ID"
-      value = module.ngohub.cognito_client_id
+      value = module.ngohub_cognito.user_pool_client_id
     },
     {
       name  = "COGNITO_USER_POOL_ID"
-      value = module.ngohub.cognito_user_pool_id
+      value = module.ngohub_cognito.user_pool_id
     },
     {
       name  = "COGNITO_REGION"
@@ -192,7 +238,7 @@ module "ecs_service" {
 }
 
 resource "aws_secretsmanager_secret" "encryption_key" {
-  name = "${module.ngohub.namespace}-encryption_key-${random_string.secrets_suffix.result}"
+  name = "${local.ngohub.namespace}-encryption_key-${random_string.secrets_suffix.result}"
 }
 
 resource "aws_secretsmanager_secret_version" "encryption_key" {
@@ -204,7 +250,7 @@ resource "aws_secretsmanager_secret_version" "encryption_key" {
 module "ngohub_iam_user" {
   source = "./modules/iam_user"
 
-  name   = "${module.ngohub.namespace}-user"
+  name   = "${local.ngohub.namespace}-user"
   policy = data.aws_iam_policy_document.ngohub_iam_user_policy.json
 }
 

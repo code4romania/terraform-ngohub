@@ -2,19 +2,14 @@
 # - sms_configuration
 
 resource "aws_cognito_user_pool" "this" {
-  name = "${local.namespace}-pool"
+  name = var.namespace
 
   # When active, DeletionProtection prevents accidental deletion of your user pool.
   # Currently active only in production
   deletion_protection = var.environment == "production" ? "ACTIVE" : "INACTIVE"
 
-  username_attributes = [
-    "email",
-  ]
-
-  auto_verified_attributes = [
-    "email",
-  ]
+  username_attributes      = var.username_attributes
+  auto_verified_attributes = var.auto_verified_attributes
 
   username_configuration {
     case_sensitive = false
@@ -35,7 +30,7 @@ resource "aws_cognito_user_pool" "this" {
   # }
 
   admin_create_user_config {
-    allow_admin_create_user_only = true
+    allow_admin_create_user_only = var.allow_admin_create_user_only
 
     invite_message_template {
       email_message = "Your username is {username} and temporary password is {####}. "
@@ -80,18 +75,15 @@ resource "aws_cognito_user_pool" "this" {
 }
 
 resource "aws_cognito_user_pool_client" "this" {
-  name         = "${local.namespace}-client"
+  name         = var.namespace
   user_pool_id = aws_cognito_user_pool.this.id
 
   callback_urls = [
     "https://${var.frontend_domain}",
-    # "http://localhost:3000"
-    # "https://${aws_amplify_app.amplify_app.default_domain}",
   ]
+
   logout_urls = [
     "https://${var.frontend_domain}",
-    # "http://localhost:3000"
-    # "https://${aws_amplify_app.amplify_app.default_domain}",
   ]
 
   allowed_oauth_flows_user_pool_client = true
@@ -123,7 +115,7 @@ resource "aws_cognito_user_pool_ui_customization" "this" {
 }
 
 resource "aws_cognito_user_pool_domain" "default" {
-  domain       = local.namespace
+  domain       = var.namespace
   user_pool_id = aws_cognito_user_pool.this.id
 }
 

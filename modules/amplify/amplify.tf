@@ -3,6 +3,8 @@ resource "aws_amplify_app" "this" {
   repository   = var.repository
   access_token = var.github_access_token
 
+  build_spec = var.build_spec
+
   custom_rule {
     source = "/<*>"
     status = "404"

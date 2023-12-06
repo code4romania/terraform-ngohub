@@ -1,5 +1,5 @@
 resource "aws_iam_user" "iam_user" {
-  name = "${local.namespace}-user"
+  name = "${var.namespace}-user"
 }
 
 resource "aws_iam_access_key" "iam_user_key" {
@@ -8,7 +8,7 @@ resource "aws_iam_access_key" "iam_user_key" {
 
 
 resource "aws_iam_role" "amplify_login_lambda" {
-  name               = "${local.namespace}-amplify-login-lambda"
+  name               = "${var.namespace}-amplify-login-lambda"
   assume_role_policy = data.aws_iam_policy_document.lambda_role_policy.json
 }
 
@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "lambda_role_policy" {
 }
 
 resource "aws_iam_policy" "lambda_logging" {
-  name   = "${local.namespace}-lambda-logging"
+  name   = "${var.namespace}-lambda-logging"
   policy = data.aws_iam_policy_document.lambda_logging_policy.json
 }
 
@@ -45,7 +45,7 @@ resource "aws_iam_role_policy_attachment" "lambda_logging" {
 }
 
 resource "aws_iam_policy" "amplify_backend" {
-  name   = "${local.namespace}-amplify-backend"
+  name   = "${var.namespace}-amplify-backend"
   policy = data.aws_iam_policy_document.amplify_login_lambda_policy.json
 }
 

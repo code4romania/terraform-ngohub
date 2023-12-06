@@ -6,7 +6,7 @@ data "archive_file" "amplify_login_create_auth_challenge" {
 }
 
 resource "aws_lambda_function" "amplify_login_create_auth_challenge" {
-  function_name    = "${local.namespace}-amplify_login_create_auth_challenge"
+  function_name    = "${var.namespace}-amplify_login_create_auth_challenge"
   filename         = data.archive_file.amplify_login_create_auth_challenge.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
@@ -30,7 +30,7 @@ data "archive_file" "amplify_login_define_auth_challenge" {
 }
 
 resource "aws_lambda_function" "amplify_login_define_auth_challenge" {
-  function_name    = "${local.namespace}-amplify_login_define_auth_challenge"
+  function_name    = "${var.namespace}-amplify_login_define_auth_challenge"
   filename         = data.archive_file.amplify_login_define_auth_challenge.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
@@ -54,7 +54,7 @@ data "archive_file" "amplify_login_verify_auth_challenge_response" {
 }
 
 resource "aws_lambda_function" "amplify_login_verify_auth_challenge_response" {
-  function_name    = "${local.namespace}-amplify_login_verify_auth_challenge_response"
+  function_name    = "${var.namespace}-amplify_login_verify_auth_challenge_response"
   filename         = data.archive_file.amplify_login_verify_auth_challenge_response.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
@@ -78,7 +78,7 @@ data "archive_file" "amplify_login_custom_message" {
 }
 
 resource "aws_lambda_function" "amplify_login_custom_message" {
-  function_name    = "${local.namespace}-amplify_login_custom_message"
+  function_name    = "${var.namespace}-amplify_login_custom_message"
   filename         = data.archive_file.amplify_login_custom_message.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
@@ -109,7 +109,7 @@ data "archive_file" "login_pre_authentication_check" {
 }
 
 resource "aws_lambda_function" "login_pre_authentication_check" {
-  function_name    = "${local.namespace}-login_pre_authentication_check"
+  function_name    = "${var.namespace}-login_pre_authentication_check"
   filename         = data.archive_file.login_pre_authentication_check.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
