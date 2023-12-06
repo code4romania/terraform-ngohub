@@ -17,9 +17,8 @@ module "vic_cognito" {
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
 
-  allow_admin_create_user_only = false
-  username_attributes          = ["email", "phone_number"]
-  auto_verified_attributes     = ["email"]
+  username_attributes      = ["email", "phone_number"]
+  auto_verified_attributes = ["email"]
 }
 
 resource "aws_cognito_user_pool_client" "vic_ngohub_client" {
@@ -330,7 +329,7 @@ data "aws_iam_policy_document" "vic_iam_user_policy" {
       "s3:DeleteObject",
       "s3:GetObjectAcl",
       "s3:PutObjectAcl",
-      "s3:PutObject"
+      "s3:PutObject",
     ]
 
     resources = [
@@ -344,11 +343,24 @@ data "aws_iam_policy_document" "vic_iam_user_policy" {
   statement {
     actions = [
       "SES:SendEmail",
-      "SES:SendRawEmail"
+      "SES:SendRawEmail",
     ]
 
     resources = [
       aws_sesv2_email_identity.main.arn
+    ]
+  }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminCreateUser",
+      "cognito-idp:AdminDeleteUser",
+      "cognito-idp:AdminUpdateUserAttributes",
+      "cognito-idp:AdminUserGlobalSignOut",
+    ]
+
+    resources = [
+      module.vic_cognito.arn
     ]
   }
 }

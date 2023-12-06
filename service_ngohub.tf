@@ -17,9 +17,8 @@ module "ngohub_cognito" {
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
 
-  allow_admin_create_user_only = true
-  username_attributes          = ["email"]
-  auto_verified_attributes     = ["email"]
+  username_attributes      = ["email"]
+  auto_verified_attributes = ["email"]
 }
 
 module "ngohub_frontend" {
@@ -256,6 +255,7 @@ module "ngohub_iam_user" {
   policy = data.aws_iam_policy_document.ngohub_iam_user_policy.json
 }
 
+
 data "aws_iam_policy_document" "ngohub_iam_user_policy" {
   statement {
     actions = [
@@ -264,7 +264,7 @@ data "aws_iam_policy_document" "ngohub_iam_user_policy" {
       "s3:DeleteObject",
       "s3:GetObjectAcl",
       "s3:PutObjectAcl",
-      "s3:PutObject"
+      "s3:PutObject",
     ]
 
     resources = [
@@ -278,11 +278,24 @@ data "aws_iam_policy_document" "ngohub_iam_user_policy" {
   statement {
     actions = [
       "SES:SendEmail",
-      "SES:SendRawEmail"
+      "SES:SendRawEmail",
     ]
 
     resources = [
       aws_sesv2_email_identity.main.arn
+    ]
+  }
+
+  statement {
+    actions = [
+      "cognito-idp:AdminCreateUser",
+      "cognito-idp:AdminDeleteUser",
+      "cognito-idp:AdminUpdateUserAttributes",
+      "cognito-idp:AdminUserGlobalSignOut",
+    ]
+
+    resources = [
+      module.ngohub_cognito.arn
     ]
   }
 }

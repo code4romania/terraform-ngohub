@@ -52,11 +52,6 @@ variable "certificate_arn" {
   type = string
 }
 
-variable "allow_admin_create_user_only" {
-  type    = bool
-  default = true
-}
-
 variable "username_attributes" {
   type    = list(string)
   default = ["email"]
