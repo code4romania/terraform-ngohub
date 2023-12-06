@@ -40,4 +40,16 @@ locals {
       domain = "vic${local.env_suffix}.${var.root_domain}"
     }
   }
+
+  centrucivic = {
+    frontend = {
+      domain = "centrucivic${local.env_suffix}.${var.root_domain}"
+    }
+  }
+
+  practice4good = {
+    frontend = {
+      domain = "practice4good${local.env_suffix}.${var.root_domain}"
+    }
+  }
 }

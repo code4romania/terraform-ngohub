@@ -1,5 +1,5 @@
 resource "aws_amplify_app" "this" {
-  name       = "${local.namespace}-amplify-app"
+  name       = local.namespace
   repository = "https://github.com/code4romania/onghub"
 
   access_token = var.github_access_token
