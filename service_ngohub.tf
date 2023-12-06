@@ -68,6 +68,8 @@ module "ngohub_frontend" {
 module "ngohub_backend" {
   source = "./modules/ecs-service"
 
+  depends_on = [module.ecs_cluster]
+
   name         = local.ngohub.namespace
   cluster_name = module.ecs_cluster.cluster_name
   min_capacity = 1

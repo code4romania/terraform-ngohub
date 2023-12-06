@@ -68,6 +68,8 @@ module "vic_frontend" {
 module "vic_backend" {
   source = "./modules/ecs-service"
 
+  depends_on = [module.ecs_cluster]
+
   name         = local.vic.namespace
   cluster_name = module.ecs_cluster.cluster_name
   min_capacity = 1
