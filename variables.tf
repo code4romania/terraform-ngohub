@@ -1,9 +1,8 @@
-variable "env" {
-  description = "Environment"
-  type        = string
+variable "environment" {
+  type = string
 
   validation {
-    condition     = contains(["production", "staging", "development"], var.env)
+    condition     = contains(["production", "staging", "development"], var.environment)
     error_message = "Allowed values for env are \"production\", \"staging\" or \"development\"."
   }
 }
@@ -33,4 +32,16 @@ variable "ngohub_backend_tag" {
 variable "root_domain" {
   description = "Root domain name."
   type        = string
+}
+
+variable "email_domain" {
+  description = "[optional] Email domain name, defaults to the root domain name."
+  type        = string
+  default     = null
+}
+
+variable "create_iam_service_linked_role" {
+  description = "Whether to create `AWSServiceRoleForECS` service-linked role. Set it to `false` if you already have an ECS cluster created in the AWS account and AWSServiceRoleForECS already exists."
+  type        = bool
+  default     = false
 }

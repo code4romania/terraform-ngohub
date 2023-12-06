@@ -6,15 +6,21 @@ terraform {
     }
   }
 
-  cloud {
-    organization = "code4romania"
-
-    workspaces {
-      tags = [
-        "ngohub",
-      ]
-    }
+  backend "s3" {
+    bucket = "ngohub-staging-terraform-state"
+    key    = "terraform.tfstate"
+    region = "eu-west-1"
   }
+
+  # cloud {
+  #   organization = "code4romania"
+
+  #   workspaces {
+  #     tags = [
+  #       "ngohub",
+  #     ]
+  #   }
+  # }
 }
 
 provider "aws" {
@@ -22,9 +28,9 @@ provider "aws" {
 
   default_tags {
     tags = {
-      app       = "ngohub"
-      env       = var.env
-      terraform = true
+      Namespace   = "ngohub"
+      Environment = var.environment
+      Terraform   = true
     }
   }
 }
@@ -35,9 +41,9 @@ provider "aws" {
 
   default_tags {
     tags = {
-      app       = "ngohub"
-      env       = var.env
-      terraform = true
+      Namespace   = "ngohub"
+      Environment = var.environment
+      Terraform   = true
     }
   }
 }
