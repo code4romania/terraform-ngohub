@@ -13,22 +13,31 @@ locals {
   }
 
   ngohub = {
-    frontend = {
-      domain = "app${local.env_suffix}.${var.root_domain}"
+    auth = {
+      domain = "auth${local.env_suffix}.${var.root_domain}"
     }
 
     backend = {
-      domain = "api-ngohub${local.env_suffix}.${var.root_domain}"
+      domain = "api${local.env_suffix}.${var.root_domain}"
       image  = "${data.aws_ecr_repository.ngohub_backend.repository_url}:${var.ngohub_backend_tag}"
+    }
+
+    frontend = {
+      domain = "app${local.env_suffix}.${var.root_domain}"
     }
   }
 
   vic = {
-    frontend = {
-      domain = "vic${local.env_suffix}.${var.root_domain}"
+    auth = {
+      domain = "auth-vic${local.env_suffix}.${var.root_domain}"
     }
+
     backend = {
       domain = "api-vic${local.env_suffix}.${var.root_domain}"
+    }
+
+    frontend = {
+      domain = "vic${local.env_suffix}.${var.root_domain}"
     }
   }
 }

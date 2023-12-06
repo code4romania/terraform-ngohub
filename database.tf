@@ -1,5 +1,6 @@
 resource "aws_db_instance" "main" {
   identifier          = local.namespace
+  db_name             = "ngohub"
   instance_class      = local.db.instance_class
   multi_az            = false
   publicly_accessible = false

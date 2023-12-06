@@ -6,7 +6,7 @@ resource "aws_lb" "main" {
 }
 
 resource "aws_lb_listener" "https" {
-  certificate_arn   = aws_acm_certificate.main.arn
+  certificate_arn   = aws_acm_certificate.regional.arn
   load_balancer_arn = aws_lb.main.id
   port              = 443
   protocol          = "HTTPS"

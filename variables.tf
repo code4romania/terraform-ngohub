@@ -45,3 +45,18 @@ variable "create_iam_service_linked_role" {
   type        = bool
   default     = false
 }
+
+variable "ngohub_hmac_api_key" {
+  type = string
+}
+
+variable "ngohub_hmac_secret_key" {
+  type = string
+}
+variable "ngohub_hmac_encryption_key" {
+  type = string
+}
+
+variable "github_access_token" {
+  type = string
+}

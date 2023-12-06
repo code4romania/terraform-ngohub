@@ -1,11 +1,5 @@
-variable "env" {
-  description = "Environment"
-  type        = string
-
-  validation {
-    condition     = contains(["production", "staging", "development"], var.env)
-    error_message = "Allowed values for env are \"production\", \"staging\" or \"development\"."
-  }
+variable "environment" {
+  type = string
 }
 
 variable "region" {
@@ -19,15 +13,41 @@ variable "root_domain" {
 }
 
 variable "email_domain" {
-  description = "[optional] Email domain name, defaults to the root domain name."
+  description = "Email domain name."
   type        = string
-  default     = null
 }
 
-variable "image_repo" {
+variable "auth_domain" {
+  description = "Cognito domain name"
+  type        = string
+}
+
+variable "backend_domain" {
+  description = "Backend domain name"
+  type        = string
+}
+
+variable "frontend_domain" {
+  description = "Frontend domain name"
+  type        = string
+}
+
+variable "hmac_api_key" {
+  description = "HMAC API Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "hmac_secret_key" {
+  description = "HMAC Secret Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "github_access_token" {
   type = string
 }
 
-variable "image_tag" {
+variable "certificate_arn" {
   type = string
 }
