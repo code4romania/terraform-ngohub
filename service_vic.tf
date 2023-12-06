@@ -22,6 +22,45 @@ module "vic_cognito" {
   auto_verified_attributes     = ["email"]
 }
 
+resource "aws_cognito_user_pool_client" "vic_ngohub_client" {
+  name         = "${local.vic.namespace}-client"
+  user_pool_id = module.ngohub_cognito.user_pool_id
+
+  access_token_validity = 1
+
+  token_validity_units {
+    access_token = "days"
+  }
+
+  callback_urls = [
+    "https://${local.vic.frontend.domain}",
+  ]
+  logout_urls = [
+    "https://${local.vic.frontend.domain}",
+  ]
+
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_flows                  = ["code"]
+  supported_identity_providers         = ["COGNITO"]
+  allowed_oauth_scopes = [
+    "aws.cognito.signin.user.admin",
+    "email",
+    "openid",
+    "profile",
+  ]
+
+  prevent_user_existence_errors = "ENABLED"
+
+  enable_propagate_additional_user_context_data = false
+  enable_token_revocation                       = true
+
+  explicit_auth_flows = [
+    "ALLOW_CUSTOM_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
+    "ALLOW_USER_SRP_AUTH",
+  ]
+}
+
 module "vic_frontend" {
   source = "./modules/amplify"
 
@@ -35,13 +74,16 @@ module "vic_frontend" {
   github_access_token = var.github_access_token
 
   environment_variables = {
-    AMPLIFY_MONOREPO_APP_ROOT      = "frontend"
-    REACT_APP_API_URL              = "https://${local.vic.backend.domain}"
-    REACT_APP_AWS_REGION           = var.region
-    REACT_APP_COGNITO_OAUTH_DOMAIN = module.vic_cognito.oauth_domain
-    REACT_APP_FRONTEND_URL         = "https://${local.vic.frontend.domain}"
-    REACT_APP_USER_POOL_CLIENT_ID  = module.vic_cognito.user_pool_client_id
-    REACT_APP_USER_POOL_ID         = module.vic_cognito.user_pool_id
+    AMPLIFY_MONOREPO_APP_ROOT = "frontend"
+
+    VITE_API_URL          = "https://${local.vic.backend.domain}"
+    VITE_APP_FRONTEND_URL = "https://${local.vic.frontend.domain}"
+
+    # ONGHub User Pool for VIC Client
+    VITE_AWS_REGION           = var.region
+    VITE_COGNITO_OAUTH_DOMAIN = module.ngohub_cognito.oauth_domain
+    VITE_USER_POOL_CLIENT_ID  = aws_cognito_user_pool_client.vic_ngohub_client.id
+    VITE_USER_POOL_ID         = module.ngohub_cognito.user_pool_id
   }
 
   build_spec = <<-EOT
@@ -86,7 +128,7 @@ module "vic_backend" {
   lb_hosts                = [local.vic.backend.domain]
   lb_domain_zone_id       = data.aws_route53_zone.main.zone_id
   lb_health_check_enabled = true
-  lb_path                 = "/health"
+  lb_path                 = "/public/health"
 
   container_memory_soft_limit = 512
   container_memory_hard_limit = 1024
@@ -124,7 +166,7 @@ module "vic_backend" {
     },
     {
       name  = "ONG_HUB_API"
-      value = "https://${local.ngohub.backend.domain}"
+      value = "https://${local.ngohub.backend.domain}/"
     },
     {
       name  = "NODE_ENV"
@@ -205,6 +247,10 @@ module "vic_backend" {
     {
       name  = "AWS_S3_BUCKET_NAME_PUBLIC"
       value = module.vic_s3_public.bucket
+    },
+    {
+      name  = "AWS_REGION"
+      value = var.region
     },
   ]
 

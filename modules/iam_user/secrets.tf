@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "this" {
-  name = "${var.name}-user-${random_string.suffix.result}"
+  name = "${var.name}-${random_string.suffix.result}"
 }
 
 resource "aws_secretsmanager_secret_version" "this" {
