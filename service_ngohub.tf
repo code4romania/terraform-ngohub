@@ -36,6 +36,7 @@ module "ecs_service" {
   lb_vpc_id               = module.vpc.vpc_id
   lb_listener_arn         = aws_lb_listener.https.arn
   lb_hosts                = [local.ngohub.backend.domain]
+  lb_domain_zone_id       = data.aws_route53_zone.main.zone_id
   lb_health_check_enabled = true
   lb_path                 = "/health"
 
@@ -106,6 +107,14 @@ module "ecs_service" {
       value = 587
     },
     {
+      name  = "MAIL_FROM"
+      value = "no-reply@${local.mail.domain}"
+    },
+    {
+      name  = "MAIL_CONTACT"
+      value = "infrastructure@onghub.ro"
+    },
+    {
       name  = "REDIS_HOST"
       value = aws_elasticache_cluster.redis.cache_nodes.0.address
     },
@@ -125,6 +134,15 @@ module "ecs_service" {
       name  = "CACHE_TTL"
       value = 600
     },
+    {
+      name  = "AWS_S3_BUCKET_NAME"
+      value = module.s3_private.bucket
+    },
+    {
+      name  = "AWS_S3_BUCKET_NAME_PUBLIC"
+      value = module.s3_public.bucket
+    },
+
   ]
 
   secrets = [
@@ -148,11 +166,28 @@ module "ecs_service" {
       name      = "DATABASE_PASSWORD"
       valueFrom = "${aws_secretsmanager_secret.rds.arn}:password::"
     },
+    {
+      name      = "AWS_ACCESS_KEY_ID"
+      valueFrom = "${module.ngohub_iam_user.secret_arn}:access_key_id::"
+    },
+    {
+      name      = "AWS_SECRET_ACCESS_KEY"
+      valueFrom = "${module.ngohub_iam_user.secret_arn}:secret_access_key::"
+    },
+    {
+      name      = "MAIL_USER"
+      valueFrom = "${module.ngohub_iam_user.secret_arn}:access_key_id::"
+    },
+    {
+      name      = "MAIL_PASS"
+      valueFrom = "${module.ngohub_iam_user.secret_arn}:ses_smtp_password::"
+    },
   ]
 
   allowed_secrets = [
     aws_secretsmanager_secret.encryption_key.arn,
-    aws_secretsmanager_secret.rds.arn
+    aws_secretsmanager_secret.rds.arn,
+    module.ngohub_iam_user.secret_arn,
   ]
 }
 
@@ -163,4 +198,66 @@ resource "aws_secretsmanager_secret" "encryption_key" {
 resource "aws_secretsmanager_secret_version" "encryption_key" {
   secret_id     = aws_secretsmanager_secret.encryption_key.id
   secret_string = var.ngohub_hmac_encryption_key
+}
+
+
+module "ngohub_iam_user" {
+  source = "./modules/iam_user"
+
+  name   = "${module.ngohub.namespace}-user"
+  policy = data.aws_iam_policy_document.ngohub_iam_user_policy.json
+}
+
+data "aws_iam_policy_document" "ngohub_iam_user_policy" {
+  statement {
+    actions = [
+      "s3:ListBucket",
+      "s3:GetObject",
+      "s3:DeleteObject",
+      "s3:GetObjectAcl",
+      "s3:PutObjectAcl",
+      "s3:PutObject"
+    ]
+
+    resources = [
+      module.s3_private.arn,
+      "${module.s3_private.arn}/*",
+      module.s3_public.arn,
+      "${module.s3_public.arn}/*",
+    ]
+  }
+
+  statement {
+    actions = [
+      "SES:SendEmail",
+      "SES:SendRawEmail"
+    ]
+
+    resources = [
+      aws_sesv2_email_identity.main.arn
+    ]
+  }
+}
+
+
+module "s3_private" {
+  source = "./modules/s3"
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
+  name = "${local.namespace}-private"
+}
+
+module "s3_public" {
+  source = "./modules/s3"
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+
+  name = "${local.namespace}-public"
 }
