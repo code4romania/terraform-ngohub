@@ -58,20 +58,25 @@ variable "create_iam_service_linked_role" {
 }
 
 variable "ngohub_hmac_api_key" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "ngohub_hmac_secret_key" {
-  type = string
+  type      = string
+  sensitive = true
 }
 variable "ngohub_hmac_encryption_key" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "github_access_token" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "expo_push_notifications_access_token" {
-  type = string
+  type      = string
+  sensitive = true
 }
