@@ -112,6 +112,7 @@ resource "aws_cognito_user_pool_ui_customization" "this" {
   css          = file("${path.module}/ui/custom.css")
   image_file   = filebase64("${path.module}/ui/logo.png")
   user_pool_id = aws_cognito_user_pool.this.id
+  depends_on   = [aws_cognito_user_pool_domain.custom]
 }
 
 resource "aws_cognito_user_pool_domain" "default" {

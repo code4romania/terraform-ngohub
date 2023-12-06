@@ -1,5 +1,5 @@
 resource "aws_iam_user" "this" {
-  name = "${var.name}-user"
+  name = "${var.name}-${random_string.suffix.result}"
 }
 
 resource "aws_iam_access_key" "this" {

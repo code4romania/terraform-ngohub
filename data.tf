@@ -2,6 +2,10 @@ data "aws_ecr_repository" "ngohub_backend" {
   name = "onghub"
 }
 
+data "aws_ecr_repository" "vic_backend" {
+  name = "vic"
+}
+
 data "aws_availability_zones" "current" {
   state = "available"
 }

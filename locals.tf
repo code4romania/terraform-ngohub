@@ -21,7 +21,6 @@ locals {
 
     backend = {
       domain = "api${local.env_suffix}.${var.root_domain}"
-      image  = "${data.aws_ecr_repository.ngohub_backend.repository_url}:${var.ngohub_backend_tag}"
     }
 
     frontend = {
@@ -30,6 +29,8 @@ locals {
   }
 
   vic = {
+    namespace = "vic-${var.environment}"
+
     auth = {
       domain = "auth-vic${local.env_suffix}.${var.root_domain}"
     }

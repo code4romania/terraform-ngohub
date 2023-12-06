@@ -1,7 +1,7 @@
-module "ngohub_cognito" {
+module "vic_cognito" {
   source = "./modules/cognito"
 
-  namespace   = local.ngohub.namespace
+  namespace   = local.vic.namespace
   environment = var.environment
   region      = var.region
 
@@ -10,38 +10,38 @@ module "ngohub_cognito" {
 
   certificate_arn = aws_acm_certificate.global.arn
 
-  auth_domain     = local.ngohub.auth.domain
-  backend_domain  = local.ngohub.backend.domain
-  frontend_domain = local.ngohub.frontend.domain
+  auth_domain     = local.vic.auth.domain
+  backend_domain  = local.vic.backend.domain
+  frontend_domain = local.vic.frontend.domain
 
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
 
-  allow_admin_create_user_only = true
-  username_attributes          = ["email"]
+  allow_admin_create_user_only = false
+  username_attributes          = ["email", "phone_number"]
   auto_verified_attributes     = ["email"]
 }
 
-module "ngohub_frontend" {
+module "vic_frontend" {
   source = "./modules/amplify"
 
-  name        = "ngohub"
-  repository  = "https://github.com/code4romania/onghub"
+  name        = "vic"
+  repository  = "https://github.com/code4romania/vic"
   branch      = "develop"
   environment = var.environment
 
-  frontend_domain = local.ngohub.frontend.domain
+  frontend_domain = local.vic.frontend.domain
 
   github_access_token = var.github_access_token
 
   environment_variables = {
     AMPLIFY_MONOREPO_APP_ROOT      = "frontend"
-    REACT_APP_API_URL              = "https://${local.ngohub.backend.domain}"
+    REACT_APP_API_URL              = "https://${local.vic.backend.domain}"
     REACT_APP_AWS_REGION           = var.region
-    REACT_APP_COGNITO_OAUTH_DOMAIN = module.ngohub_cognito.oauth_domain
-    REACT_APP_FRONTEND_URL         = "https://${local.ngohub.frontend.domain}"
-    REACT_APP_USER_POOL_CLIENT_ID  = module.ngohub_cognito.user_pool_client_id
-    REACT_APP_USER_POOL_ID         = module.ngohub_cognito.user_pool_id
+    REACT_APP_COGNITO_OAUTH_DOMAIN = module.vic_cognito.oauth_domain
+    REACT_APP_FRONTEND_URL         = "https://${local.vic.frontend.domain}"
+    REACT_APP_USER_POOL_CLIENT_ID  = module.vic_cognito.user_pool_client_id
+    REACT_APP_USER_POOL_ID         = module.vic_cognito.user_pool_id
   }
 
   build_spec = <<-EOT
@@ -65,23 +65,23 @@ module "ngohub_frontend" {
   EOT
 }
 
-module "ngohub_backend" {
+module "vic_backend" {
   source = "./modules/ecs-service"
 
-  name         = local.ngohub.namespace
+  name         = local.vic.namespace
   cluster_name = module.ecs_cluster.cluster_name
   min_capacity = 1
   max_capacity = 3
 
-  image_repo = data.aws_ecr_repository.ngohub_backend.repository_url
-  image_tag  = var.ngohub_backend_tag
+  image_repo = data.aws_ecr_repository.vic_backend.repository_url
+  image_tag  = var.vic_backend_tag
 
   use_load_balancer       = true
   lb_dns_name             = aws_lb.main.dns_name
   lb_zone_id              = aws_lb.main.zone_id
   lb_vpc_id               = module.vpc.vpc_id
   lb_listener_arn         = aws_lb_listener.https.arn
-  lb_hosts                = [local.ngohub.backend.domain]
+  lb_hosts                = [local.vic.backend.domain]
   lb_domain_zone_id       = data.aws_route53_zone.main.zone_id
   lb_health_check_enabled = true
   lb_path                 = "/health"
@@ -118,7 +118,11 @@ module "ngohub_backend" {
   environment = [
     {
       name  = "ONGHUB_URL"
-      value = "https://${local.ngohub.frontend.domain}"
+      value = "https://${local.vic.frontend.domain}"
+    },
+    {
+      name  = "ONG_HUB_API"
+      value = "https://${local.ngohub.backend.domain}"
     },
     {
       name  = "NODE_ENV"
@@ -130,18 +134,30 @@ module "ngohub_backend" {
     },
     {
       name  = "DATABASE_NAME"
-      value = "ngohub"
+      value = "vic"
     },
     {
-      name  = "COGNITO_CLIENT_ID"
+      name  = "COGNITO_CLIENT_ID_MOBILE"
+      value = module.vic_cognito.user_pool_client_id
+    },
+    {
+      name  = "COGNITO_USER_POOL_ID_MOBILE"
+      value = module.vic_cognito.user_pool_id
+    },
+    {
+      name  = "COGNITO_REGION_MOBILE"
+      value = var.region
+    },
+    {
+      name  = "COGNITO_CLIENT_ID_WEB"
       value = module.ngohub_cognito.user_pool_client_id
     },
     {
-      name  = "COGNITO_USER_POOL_ID"
+      name  = "COGNITO_USER_POOL_ID_WEB"
       value = module.ngohub_cognito.user_pool_id
     },
     {
-      name  = "COGNITO_REGION"
+      name  = "COGNITO_REGION_WEB"
       value = var.region
     },
     {
@@ -182,13 +198,12 @@ module "ngohub_backend" {
     },
     {
       name  = "AWS_S3_BUCKET_NAME"
-      value = module.ngohub_s3_private.bucket
+      value = module.vic_s3_private.bucket
     },
     {
       name  = "AWS_S3_BUCKET_NAME_PUBLIC"
-      value = module.s3_public.bucket
+      value = module.vic_s3_public.bucket
     },
-
   ]
 
   secrets = [
@@ -214,47 +229,52 @@ module "ngohub_backend" {
     },
     {
       name      = "AWS_ACCESS_KEY_ID"
-      valueFrom = "${module.ngohub_iam_user.secret_arn}:access_key_id::"
+      valueFrom = "${module.vic_iam_user.secret_arn}:access_key_id::"
     },
     {
       name      = "AWS_SECRET_ACCESS_KEY"
-      valueFrom = "${module.ngohub_iam_user.secret_arn}:secret_access_key::"
+      valueFrom = "${module.vic_iam_user.secret_arn}:secret_access_key::"
     },
     {
       name      = "MAIL_USER"
-      valueFrom = "${module.ngohub_iam_user.secret_arn}:access_key_id::"
+      valueFrom = "${module.vic_iam_user.secret_arn}:access_key_id::"
     },
     {
       name      = "MAIL_PASS"
-      valueFrom = "${module.ngohub_iam_user.secret_arn}:ses_smtp_password::"
+      valueFrom = "${module.vic_iam_user.secret_arn}:ses_smtp_password::"
+    },
+    {
+      name      = "EXPO_PUSH_NOTIFICATIONS_ACCESS_TOKEN"
+      valueFrom = aws_secretsmanager_secret.expo_push_notifications_access_token.arn
     },
   ]
 
   allowed_secrets = [
+    aws_secretsmanager_secret.expo_push_notifications_access_token.arn,
     aws_secretsmanager_secret.encryption_key.arn,
     aws_secretsmanager_secret.rds.arn,
-    module.ngohub_iam_user.secret_arn,
+    module.vic_iam_user.secret_arn,
   ]
 }
 
-resource "aws_secretsmanager_secret" "encryption_key" {
-  name = "${local.ngohub.namespace}-encryption_key-${random_string.secrets_suffix.result}"
+resource "aws_secretsmanager_secret" "expo_push_notifications_access_token" {
+  name = "${local.ngohub.namespace}-expo_push_notifications_access_token-${random_string.secrets_suffix.result}"
 }
 
-resource "aws_secretsmanager_secret_version" "encryption_key" {
-  secret_id     = aws_secretsmanager_secret.encryption_key.id
-  secret_string = var.ngohub_hmac_encryption_key
+resource "aws_secretsmanager_secret_version" "expo_push_notifications_access_token" {
+  secret_id     = aws_secretsmanager_secret.expo_push_notifications_access_token.id
+  secret_string = var.expo_push_notifications_access_token
 }
 
 
-module "ngohub_iam_user" {
+module "vic_iam_user" {
   source = "./modules/iam_user"
 
   name   = "${local.ngohub.namespace}-user"
-  policy = data.aws_iam_policy_document.ngohub_iam_user_policy.json
+  policy = data.aws_iam_policy_document.vic_iam_user_policy.json
 }
 
-data "aws_iam_policy_document" "ngohub_iam_user_policy" {
+data "aws_iam_policy_document" "vic_iam_user_policy" {
   statement {
     actions = [
       "s3:ListBucket",
@@ -266,10 +286,10 @@ data "aws_iam_policy_document" "ngohub_iam_user_policy" {
     ]
 
     resources = [
-      module.ngohub_s3_private.arn,
-      "${module.ngohub_s3_private.arn}/*",
-      module.s3_public.arn,
-      "${module.s3_public.arn}/*",
+      module.vic_s3_private.arn,
+      "${module.vic_s3_private.arn}/*",
+      module.vic_s3_public.arn,
+      "${module.vic_s3_public.arn}/*",
     ]
   }
 
@@ -286,7 +306,7 @@ data "aws_iam_policy_document" "ngohub_iam_user_policy" {
 }
 
 
-module "ngohub_s3_private" {
+module "vic_s3_private" {
   source = "./modules/s3"
 
   block_public_acls       = true
@@ -297,7 +317,7 @@ module "ngohub_s3_private" {
   name = "${local.namespace}-private"
 }
 
-module "s3_public" {
+module "vic_s3_public" {
   source = "./modules/s3"
 
   block_public_acls       = false
