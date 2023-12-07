@@ -67,3 +67,7 @@ variable "enable_localhost_urls" {
   type        = bool
   default     = false
 }
+
+variable "ses_identiy_arn" {
+  type = string
+}

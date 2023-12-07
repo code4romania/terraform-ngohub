@@ -53,7 +53,7 @@ resource "aws_cognito_user_pool" "this" {
 
   email_configuration {
     email_sending_account = "DEVELOPER"
-    source_arn            = data.aws_ses_domain_identity.this.arn
+    source_arn            = var.ses_identiy_arn
     from_email_address    = "no-reply@${var.email_domain}"
   }
 

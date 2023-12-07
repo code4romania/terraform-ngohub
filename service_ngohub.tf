@@ -21,6 +21,7 @@ module "ngohub_cognito" {
   auto_verified_attributes = ["email"]
 
   enable_localhost_urls = var.environment != "production"
+  ses_identiy_arn       = aws_sesv2_email_identity.main.arn
 }
 
 module "ngohub_frontend" {
