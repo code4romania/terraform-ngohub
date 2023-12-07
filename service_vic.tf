@@ -19,6 +19,8 @@ module "vic_cognito" {
 
   username_attributes      = ["email", "phone_number"]
   auto_verified_attributes = ["email"]
+
+  enable_localhost_urls = var.environment != "production"
 }
 
 resource "aws_cognito_user_pool_client" "vic_ngohub_client" {

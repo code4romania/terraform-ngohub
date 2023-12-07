@@ -56,7 +56,14 @@ variable "username_attributes" {
   type    = list(string)
   default = ["email"]
 }
+
 variable "auto_verified_attributes" {
   type    = list(string)
   default = []
+}
+
+variable "enable_localhost_urls" {
+  description = "Add `http://localhost:3000` to allowed callback and logout urls"
+  type        = bool
+  default     = false
 }

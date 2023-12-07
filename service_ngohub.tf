@@ -19,6 +19,8 @@ module "ngohub_cognito" {
 
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
+
+  enable_localhost_urls = var.environment != "production"
 }
 
 module "ngohub_frontend" {
