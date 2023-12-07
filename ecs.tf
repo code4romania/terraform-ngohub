@@ -25,6 +25,8 @@ module "ecs_cluster" {
   spot_allocation_strategy = "price-capacity-optimized"
   spot_instance_pools      = 0
 
+  service_discovery_domain = "${local.namespace}.svc"
+
   depends_on = [aws_iam_service_linked_role.ecs]
 }
 
