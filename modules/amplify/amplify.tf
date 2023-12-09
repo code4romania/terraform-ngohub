@@ -43,4 +43,12 @@ resource "aws_amplify_domain_association" "this" {
     branch_name = aws_amplify_branch.this.branch_name
     prefix      = ""
   }
+
+  dynamic "sub_domain" {
+    for_each = var.enable_www_subdomain ? ["www"] : []
+    content {
+      branch_name = aws_amplify_branch.this.branch_name
+      prefix      = "www"
+    }
+  }
 }

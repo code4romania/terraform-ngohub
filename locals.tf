@@ -46,7 +46,7 @@ locals {
 
   centrucivic = {
     frontend = {
-      domain = "centrucivic${local.env_suffix}.${var.root_domain}"
+      domain = var.environment == "production" ? "www.centrucivic.ro" : "centrucivic${local.env_suffix}.${var.root_domain}"
     }
   }
 

@@ -31,3 +31,8 @@ variable "build_spec" {
   type    = string
   default = null
 }
+
+variable "enable_www_subdomain" {
+  type    = bool
+  default = false
+}
