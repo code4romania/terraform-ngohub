@@ -61,3 +61,47 @@ resource "aws_iam_role_policy_attachment" "attach_amplify_login_lambda_policy_to
   policy_arn = aws_iam_policy.amplify_backend.arn
 }
 
+resource "aws_iam_role" "cognito_sms_role" {
+  count              = var.enable_sms ? 1 : 0
+  name               = "${var.namespace}-cognito-sms-role"
+  assume_role_policy = data.aws_iam_policy_document.cognito_sms_policy.json
+}
+
+data "aws_iam_policy_document" "cognito_sms_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cognito-idp.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "sts:ExternalId"
+      values   = [var.sms_external_id]
+    }
+  }
+}
+
+resource "aws_iam_policy" "sns_publish" {
+  count  = var.enable_sms ? 1 : 0
+  name   = "${var.namespace}-sns-publish"
+  policy = data.aws_iam_policy_document.sns_publish.json
+}
+
+data "aws_iam_policy_document" "sns_publish" {
+  statement {
+    actions = [
+      "sns:publish"
+    ]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "attach_sns_publish_policy_to_cognito_sms_role" {
+  count      = var.enable_sms ? 1 : 0
+  role       = aws_iam_role.cognito_sms_role[0].name
+  policy_arn = aws_iam_policy.sns_publish[0].arn
+}

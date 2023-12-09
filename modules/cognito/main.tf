@@ -1,6 +1,3 @@
-# TODO:
-# - sms_configuration
-
 resource "aws_cognito_user_pool" "this" {
   name = var.namespace
 
@@ -25,9 +22,9 @@ resource "aws_cognito_user_pool" "this" {
     sms_message          = "Your verification code is {####}. "
   }
 
-  # software_token_mfa_configuration {
-  #   enabled = true
-  # }
+  software_token_mfa_configuration {
+    enabled = true
+  }
 
   admin_create_user_config {
     allow_admin_create_user_only = false
@@ -50,6 +47,16 @@ resource "aws_cognito_user_pool" "this" {
       priority = 2
     }
   }
+
+  dynamic "sms_configuration" {
+    for_each = var.enable_sms ? [1] : []
+    content {
+      external_id    = var.sms_external_id
+      sns_caller_arn = aws_iam_role.cognito_sms_role[0].arn
+      sns_region     = var.region
+    }
+  }
+
 
   email_configuration {
     email_sending_account = "DEVELOPER"

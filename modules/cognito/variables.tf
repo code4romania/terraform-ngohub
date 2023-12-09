@@ -71,3 +71,20 @@ variable "enable_localhost_urls" {
 variable "ses_identiy_arn" {
   type = string
 }
+
+variable "enable_sms" {
+  description = "Enable SMS"
+  type        = bool
+  default     = false
+}
+
+variable "sms_external_id" {
+  description = "External ID used in IAM role trust relationships."
+  type        = string
+  default     = "" # needs to be set to a non-null value for the module to work
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9][-a-zA-Z0-9]{0,9}[a-zA-Z0-9]$", var.sms_external_id))
+    error_message = "Maximum 11 alphanumeric or hyphen (-) characters, including at least one letter and no spaces. It has to start and end with an alphanumeric character."
+  }
+}
