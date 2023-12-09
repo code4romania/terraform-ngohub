@@ -16,6 +16,16 @@ resource "aws_amplify_app" "this" {
     status = "200"
     target = "/index.html"
   }
+
+  dynamic "custom_rule" {
+    for_each = var.enable_www_subdomain ? [local.frontend_domain] : []
+
+    content {
+      source = "https://${custom_rule.value}"
+      status = "302"
+      target = "https://www.${custom_rule.value}"
+    }
+  }
 }
 
 resource "aws_amplify_branch" "this" {
@@ -35,12 +45,20 @@ resource "aws_amplify_branch" "this" {
 }
 
 resource "aws_amplify_domain_association" "this" {
-  count       = var.frontend_domain != null ? 1 : 0
+  count       = local.frontend_domain != null ? 1 : 0
   app_id      = aws_amplify_app.this.id
-  domain_name = var.frontend_domain
+  domain_name = local.frontend_domain
 
   sub_domain {
     branch_name = aws_amplify_branch.this.branch_name
     prefix      = ""
+  }
+
+  dynamic "sub_domain" {
+    for_each = var.enable_www_subdomain ? ["www"] : []
+    content {
+      branch_name = aws_amplify_branch.this.branch_name
+      prefix      = "www"
+    }
   }
 }

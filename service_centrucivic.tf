@@ -6,7 +6,8 @@ module "centrucivic_amplify" {
   branch      = "develop"
   environment = var.environment
 
-  frontend_domain = local.centrucivic.frontend.domain
+  frontend_domain      = local.centrucivic.frontend.domain
+  enable_www_subdomain = var.environment == "production"
 
   github_access_token = var.github_access_token
 
