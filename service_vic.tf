@@ -377,7 +377,7 @@ module "vic_s3_private" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 
-  name = "${local.namespace}-private"
+  name = "${local.vic.namespace}-private"
 }
 
 module "vic_s3_public" {
@@ -388,5 +388,5 @@ module "vic_s3_public" {
   ignore_public_acls      = false
   restrict_public_buckets = false
 
-  name = "${local.namespace}-public"
+  name = "${local.vic.namespace}-public"
 }
