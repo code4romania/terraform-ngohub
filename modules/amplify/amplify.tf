@@ -5,6 +5,17 @@ resource "aws_amplify_app" "this" {
 
   build_spec = var.build_spec
 
+  # This needs to be first
+  dynamic "custom_rule" {
+    for_each = var.enable_www_subdomain ? [local.frontend_domain] : []
+
+    content {
+      source = "https://${custom_rule.value}"
+      status = "302"
+      target = "https://www.${custom_rule.value}"
+    }
+  }
+
   custom_rule {
     source = "/<*>"
     status = "404"
@@ -15,16 +26,6 @@ resource "aws_amplify_app" "this" {
     source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|webp|woff|ttf|map|json)$)([^.]+$)/>"
     status = "200"
     target = "/index.html"
-  }
-
-  dynamic "custom_rule" {
-    for_each = var.enable_www_subdomain ? [local.frontend_domain] : []
-
-    content {
-      source = "https://${custom_rule.value}"
-      status = "302"
-      target = "https://www.${custom_rule.value}"
-    }
   }
 }
 
