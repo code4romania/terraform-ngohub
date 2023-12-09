@@ -35,9 +35,9 @@ resource "aws_amplify_branch" "this" {
 }
 
 resource "aws_amplify_domain_association" "this" {
-  count       = var.frontend_domain != null ? 1 : 0
+  count       = local.frontend_domain != null ? 1 : 0
   app_id      = aws_amplify_app.this.id
-  domain_name = replace(var.frontend_domain, "/^www\\./", "")
+  domain_name = local.frontend_domain
 
   sub_domain {
     branch_name = aws_amplify_branch.this.branch_name
