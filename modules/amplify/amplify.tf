@@ -16,6 +16,16 @@ resource "aws_amplify_app" "this" {
     status = "200"
     target = "/index.html"
   }
+
+  dynamic "custom_rule" {
+    for_each = var.enable_www_subdomain ? [local.frontend_domain] : []
+
+    content {
+      source = "https://${custom_rule.value}"
+      status = "302"
+      target = "https://www.${custom_rule.value}"
+    }
+  }
 }
 
 resource "aws_amplify_branch" "this" {
