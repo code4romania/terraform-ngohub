@@ -6,7 +6,8 @@ module "practice4good_amplify" {
   branch      = "develop"
   environment = var.environment
 
-  frontend_domain = local.practice4good.frontend.domain
+  frontend_domain      = local.practice4good.frontend.domain
+  enable_www_subdomain = var.environment == "production"
 
   github_access_token = var.github_access_token
 
