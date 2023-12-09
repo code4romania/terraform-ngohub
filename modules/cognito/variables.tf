@@ -72,6 +72,18 @@ variable "ses_identiy_arn" {
   type = string
 }
 
+variable "enable_mfa" {
+  description = "Enable MFA"
+  type        = bool
+  default     = false
+}
+
+variable "enforce_mfa" {
+  description = "Set mfa_configuration to ON instead of OPTIONAL"
+  type        = bool
+  default     = false
+}
+
 variable "enable_sms" {
   description = "Enable SMS"
   type        = bool

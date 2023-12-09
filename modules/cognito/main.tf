@@ -12,7 +12,6 @@ resource "aws_cognito_user_pool" "this" {
     case_sensitive = false
   }
 
-  mfa_configuration          = "OFF"
   sms_authentication_message = "Your verification code is {####}."
 
   verification_message_template {
@@ -22,8 +21,13 @@ resource "aws_cognito_user_pool" "this" {
     sms_message          = "Your verification code is {####}. "
   }
 
-  software_token_mfa_configuration {
-    enabled = true
+
+  mfa_configuration = var.enable_mfa ? (var.enforce_mfa ? "ON" : "OPTIONAL") : "OFF"
+  dynamic "software_token_mfa_configuration" {
+    for_each = var.enable_mfa ? [1] : []
+    content {
+      enabled = true
+    }
   }
 
   admin_create_user_config {
