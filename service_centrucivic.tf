@@ -7,7 +7,7 @@ module "centrucivic_amplify" {
   environment = var.environment
 
   frontend_domain      = local.centrucivic.frontend.domain
-  enable_www_subdomain = var.environment == "production"
+  enable_www_subdomain = local.isProduction
 
   github_access_token = var.github_access_token
 

@@ -4,7 +4,7 @@ resource "aws_db_instance" "main" {
   instance_class      = local.db.instance_class
   multi_az            = false
   publicly_accessible = false
-  deletion_protection = var.environment == "production"
+  deletion_protection = local.isProduction
 
   availability_zone = local.availability_zone
 

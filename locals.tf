@@ -1,6 +1,8 @@
 locals {
+  isProduction = var.environment == "production"
+
   namespace  = "ngohub-${var.environment}"
-  env_suffix = var.environment == "production" ? "" : "-${var.environment}"
+  env_suffix = local.isProduction ? "" : "-${var.environment}"
 
   availability_zone = data.aws_availability_zones.current.names[1]
 
@@ -46,13 +48,13 @@ locals {
 
   centrucivic = {
     frontend = {
-      domain = var.environment == "production" ? "www.centrucivic.ro" : "centrucivic${local.env_suffix}.${var.root_domain}"
+      domain = local.isProduction ? "www.centrucivic.ro" : "centrucivic${local.env_suffix}.${var.root_domain}"
     }
   }
 
   practice4good = {
     frontend = {
-      domain = var.environment == "production" ? "www.practice4good.ro" : "practice4good${local.env_suffix}.${var.root_domain}"
+      domain = local.isProduction ? "www.practice4good.ro" : "practice4good${local.env_suffix}.${var.root_domain}"
     }
   }
 }
