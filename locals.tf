@@ -52,7 +52,7 @@ locals {
 
   practice4good = {
     frontend = {
-      domain = "practice4good${local.env_suffix}.${var.root_domain}"
+      domain = var.environment == "production" ? "www.practice4good.ro" : "practice4good${local.env_suffix}.${var.root_domain}"
     }
   }
 }
