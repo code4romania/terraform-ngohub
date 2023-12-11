@@ -124,7 +124,7 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink) => `
             </h1>
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
                 Bună,<br /><br />
-                Contul tău de ONG Hub a fost creat cu success. Pentru a te loga în
+                Contul tău de NGO Hub a fost creat cu success. Pentru a te loga în
                 aplicație te rugăm să accesezi ONGHub apasand butonul de mai jos si sa folosești urmatoarele credențialele temporare:<br /><br />Username:
                 <strong>${username}</strong><br />Parola temporară:
                 <strong>${tempPassword}</strong>
@@ -160,8 +160,8 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink) => `
 `
 
 module.exports = {
-    getForgotPasswordEmailTemplate: FORGOT_PASSWORD_CONTENT,
-    getForgotPasswordEmailTitle: () => 'Codul tău de verificare',
-    getInviteUserEmailTemplate: USER_INVITE_CONTENT,
-    getInviteUserEmailTitle: (username) => 'Bun venit in ONGHub!'
+  getForgotPasswordEmailTemplate: FORGOT_PASSWORD_CONTENT,
+  getForgotPasswordEmailTitle: () => 'Codul tău de verificare',
+  getInviteUserEmailTemplate: USER_INVITE_CONTENT,
+  getInviteUserEmailTitle: (username) => 'Bun venit in ONGHub!'
 }
