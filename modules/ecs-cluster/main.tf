@@ -50,6 +50,13 @@ resource "aws_launch_template" "ecs" {
     http_tokens   = "required"
   }
 
+  # we don't want to create a new template just because there is a newer AMI
+  lifecycle {
+    ignore_changes = [
+      image_id,
+    ]
+  }
+
   tags = var.tags
 }
 
