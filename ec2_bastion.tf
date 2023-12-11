@@ -39,6 +39,13 @@ resource "aws_instance" "bastion" {
     encrypted   = true
   }
 
+  # we don't want to create a new instance just because there is a newer AMI
+  lifecycle {
+    ignore_changes = [
+      ami,
+    ]
+  }
+
   tags = {
     Name = "${local.namespace}-bastion"
   }
