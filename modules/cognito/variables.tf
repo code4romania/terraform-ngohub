@@ -124,3 +124,15 @@ variable "google_provider_client_secret" {
   type        = string
   default     = null
 }
+
+variable "ui_css" {
+  description = "The CSS values in the UI customization, provided as a string."
+  type        = string
+  default     = null
+}
+
+variable "ui_logo" {
+  description = "The uploaded logo image for the UI customization, provided as a base64-encoded String. Drift detection is not possible for this argument."
+  type        = string
+  default     = null
+}

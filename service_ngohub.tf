@@ -14,6 +14,9 @@ module "ngohub_cognito" {
   backend_domain  = local.ngohub.backend.domain
   frontend_domain = local.ngohub.frontend.domain
 
+  ui_css  = file("${path.module}/ui/custom.css")
+  ui_logo = filebase64("${path.module}/ui/ngohub.png")
+
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
 
