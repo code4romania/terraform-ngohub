@@ -100,3 +100,27 @@ variable "sms_external_id" {
     error_message = "Maximum 11 alphanumeric or hyphen (-) characters, including at least one letter and no spaces. It has to start and end with an alphanumeric character."
   }
 }
+
+variable "facebook_provider_client_id" {
+  description = "Facebook provider client id"
+  type        = string
+  default     = null
+}
+
+variable "facebook_provider_client_secret" {
+  description = "Facebook provider client secret"
+  type        = string
+  default     = null
+}
+
+variable "google_provider_client_id" {
+  description = "Google provider client id"
+  type        = string
+  default     = null
+}
+
+variable "google_provider_client_secret" {
+  description = "Google provider client secret"
+  type        = string
+  default     = null
+}

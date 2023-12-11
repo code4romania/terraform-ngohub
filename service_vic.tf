@@ -25,6 +25,12 @@ module "vic_cognito" {
 
   enable_sms      = true
   sms_external_id = local.isProduction ? "VIC" : "VIC-test"
+
+  facebook_provider_client_id     = var.vic_facebook_provider_client_id
+  facebook_provider_client_secret = var.vic_facebook_provider_client_secret
+
+  google_provider_client_id     = var.vic_google_provider_client_id
+  google_provider_client_secret = var.vic_google_provider_client_secret
 }
 
 resource "aws_cognito_user_pool_client" "vic_ngohub_client" {

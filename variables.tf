@@ -80,3 +80,28 @@ variable "expo_push_notifications_access_token" {
   type      = string
   sensitive = true
 }
+
+variable "vic_facebook_provider_client_id" {
+  description = "Facebook provider client id"
+  type        = string
+  default     = null
+}
+
+variable "vic_facebook_provider_client_secret" {
+  description = "Facebook provider client secret"
+  type        = string
+  default     = null
+  sensitive   = true
+}
+variable "vic_google_provider_client_id" {
+  description = "Google provider client id"
+  type        = string
+  default     = null
+}
+
+variable "vic_google_provider_client_secret" {
+  description = "Google provider client secret"
+  type        = string
+  default     = null
+  sensitive   = true
+}
