@@ -51,6 +51,12 @@ variable "email_domain" {
   default     = null
 }
 
+variable "email_contact" {
+  description = "Email address where users can contact us."
+  type        = string
+  default     = null
+}
+
 variable "create_iam_service_linked_role" {
   description = "Whether to create `AWSServiceRoleForECS` service-linked role. Set it to `false` if you already have an ECS cluster created in the AWS account and AWSServiceRoleForECS already exists."
   type        = bool

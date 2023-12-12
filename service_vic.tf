@@ -6,7 +6,7 @@ module "vic_cognito" {
   region      = var.region
 
   root_domain  = var.root_domain
-  email_domain = local.mail.domain
+  email_domain = local.mail_domain
 
   certificate_arn = aws_acm_certificate.global.arn
 
@@ -28,6 +28,8 @@ module "vic_cognito" {
 
   enable_sms      = true
   sms_external_id = local.isProduction ? "VIC" : "VIC-test"
+
+  email_contact = var.email_contact
 
   facebook_provider_client_id     = var.vic_facebook_provider_client_id
   facebook_provider_client_secret = var.vic_facebook_provider_client_secret
@@ -237,11 +239,11 @@ module "vic_backend" {
     },
     {
       name  = "MAIL_FROM"
-      value = "no-reply@${local.mail.domain}"
+      value = local.mail_from
     },
     {
       name  = "MAIL_CONTACT"
-      value = "infrastructure@onghub.ro"
+      value = var.email_contact
     },
     {
       name  = "REDIS_HOST"

@@ -141,3 +141,9 @@ variable "extra_callback_urls" {
   type    = list(string)
   default = []
 }
+
+variable "email_contact" {
+  description = "Email address where users can contact us."
+  type        = string
+  default     = null
+}

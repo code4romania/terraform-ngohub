@@ -1,6 +1,6 @@
 # Domain
 resource "aws_sesv2_email_identity" "main" {
-  email_identity         = local.mail.domain
+  email_identity         = local.mail_domain
   configuration_set_name = aws_sesv2_configuration_set.main.configuration_set_name
 }
 

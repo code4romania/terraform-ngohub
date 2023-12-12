@@ -6,7 +6,7 @@ module "ngohub_cognito" {
   region      = var.region
 
   root_domain  = var.root_domain
-  email_domain = local.mail.domain
+  email_domain = local.mail_domain
 
   certificate_arn = aws_acm_certificate.global.arn
 
@@ -28,6 +28,8 @@ module "ngohub_cognito" {
 
   enable_sms      = true
   sms_external_id = local.isProduction ? "NGOHub" : "NGOHub-test"
+
+  email_contact = var.email_contact
 }
 
 module "ngohub_frontend" {
@@ -168,11 +170,11 @@ module "ngohub_backend" {
     },
     {
       name  = "MAIL_FROM"
-      value = "no-reply@${local.mail.domain}"
+      value = local.mail_from
     },
     {
       name  = "MAIL_CONTACT"
-      value = "infrastructure@onghub.ro"
+      value = var.email_contact
     },
     {
       name  = "REDIS_HOST"
