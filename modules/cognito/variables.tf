@@ -136,3 +136,8 @@ variable "ui_logo" {
   type        = string
   default     = null
 }
+
+variable "extra_callback_urls" {
+  type    = list(string)
+  default = []
+}

@@ -89,15 +89,21 @@ resource "aws_cognito_user_pool_client" "this" {
   name         = var.namespace
   user_pool_id = aws_cognito_user_pool.this.id
 
-  callback_urls = compact([
-    "https://${var.frontend_domain}",
-    var.enable_localhost_urls ? "http://localhost:3000" : null,
-  ])
+  callback_urls = compact(concat(
+    [
+      "https://${var.frontend_domain}",
+      var.enable_localhost_urls ? "http://localhost:3000" : null,
+    ],
+    var.extra_callback_urls
+  ))
 
-  logout_urls = compact([
-    "https://${var.frontend_domain}",
-    var.enable_localhost_urls ? "http://localhost:3000" : null,
-  ])
+  logout_urls = compact(concat(
+    [
+      "https://${var.frontend_domain}",
+      var.enable_localhost_urls ? "http://localhost:3000" : null,
+    ],
+    var.extra_callback_urls
+  ))
 
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]

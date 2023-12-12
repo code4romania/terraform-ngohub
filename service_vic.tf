@@ -34,6 +34,11 @@ module "vic_cognito" {
 
   google_provider_client_id     = var.vic_google_provider_client_id
   google_provider_client_secret = var.vic_google_provider_client_secret
+
+  extra_callback_urls = [
+    "vic://",
+    local.isProduction ? null : "exp://192.168.68.61:8081",
+  ]
 }
 
 resource "aws_cognito_user_pool_client" "vic_ngohub_client" {
