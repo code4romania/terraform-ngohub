@@ -191,6 +191,10 @@ module "vic_backend" {
       value = 80
     },
     {
+      name  = "LOGGING_LEVEL"
+      value = var.environment == "production" ? "warn" : "debug"
+    },
+    {
       name  = "DATABASE_NAME"
       value = "vic"
     },
@@ -362,7 +366,8 @@ data "aws_iam_policy_document" "vic_iam_user_policy" {
     ]
 
     resources = [
-      aws_sesv2_email_identity.main.arn
+      aws_sesv2_email_identity.main.arn,
+      aws_sesv2_configuration_set.main.arn,
     ]
   }
 

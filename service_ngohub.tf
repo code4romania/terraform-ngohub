@@ -139,6 +139,10 @@ module "ngohub_backend" {
       value = 80
     },
     {
+      name  = "LOGGING_LEVEL"
+      value = var.environment == "production" ? "warn" : "debug"
+    },
+    {
       name  = "DATABASE_NAME"
       value = "ngohub"
     },
@@ -198,7 +202,6 @@ module "ngohub_backend" {
       name  = "AWS_S3_BUCKET_NAME_PUBLIC"
       value = module.s3_public.bucket
     },
-
   ]
 
   secrets = [
@@ -291,7 +294,8 @@ data "aws_iam_policy_document" "ngohub_iam_user_policy" {
     ]
 
     resources = [
-      aws_sesv2_email_identity.main.arn
+      aws_sesv2_email_identity.main.arn,
+      aws_sesv2_configuration_set.main.arn,
     ]
   }
 
