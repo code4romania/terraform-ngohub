@@ -31,7 +31,7 @@ resource "aws_cognito_user_pool" "this" {
   }
 
   admin_create_user_config {
-    allow_admin_create_user_only = false
+    allow_admin_create_user_only = true
 
     invite_message_template {
       email_message = "Your username is {username} and temporary password is {####}. "

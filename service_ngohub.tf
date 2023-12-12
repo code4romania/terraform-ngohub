@@ -200,7 +200,7 @@ module "ngohub_backend" {
     },
     {
       name  = "AWS_S3_BUCKET_NAME_PUBLIC"
-      value = module.s3_public.bucket
+      value = module.s3_public.bucket_regional_domain_name
     },
   ]
 
