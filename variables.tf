@@ -72,6 +72,7 @@ variable "ngohub_hmac_secret_key" {
   type      = string
   sensitive = true
 }
+
 variable "ngohub_hmac_encryption_key" {
   type      = string
   sensitive = true
