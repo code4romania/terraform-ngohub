@@ -104,7 +104,7 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
             <img style="margin: 0 1rem" src="${emailAssetsUrl}/instagram_logo.png" /></a>
         </td>
         <td>
-          <a style="text-decoration: none; color: #1a15ea" href="/" target="_blank">
+          <a style="text-decoration: none; color: #1a15ea" href="https://www.youtube.com/@codeforromania5856" target="_blank">
             <img style="margin: 0 1rem" src="${emailAssetsUrl}/youtube_logo.png" /></a>
         </td>
         <td>
@@ -233,7 +233,7 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
                               src="${emailAssetsUrl}/instagram_logo.png" /></a>
                   </td>
                   <td>
-                      <a style="text-decoration: none; color: #1a15ea" href="/" target="_blank">
+                      <a style="text-decoration: none; color: #1a15ea" href="https://www.youtube.com/@codeforromania5856" target="_blank">
                           <img style="margin: 0 1rem"
                               src="${emailAssetsUrl}/youtube_logo.png" /></a>
                   </td>
