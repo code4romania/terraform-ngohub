@@ -338,4 +338,23 @@ module "s3_public" {
   restrict_public_buckets = false
 
   name = "${local.ngohub.namespace}-public"
+
+  policy = data.aws_iam_policy_document.ngohub_s3_public_policy.json
+}
+
+data "aws_iam_policy_document" "ngohub_s3_public_policy" {
+  statement {
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "${module.s3_public.arn}/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
 }

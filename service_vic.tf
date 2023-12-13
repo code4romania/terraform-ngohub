@@ -415,4 +415,23 @@ module "vic_s3_public" {
   restrict_public_buckets = false
 
   name = "${local.vic.namespace}-public"
+
+  policy = data.aws_iam_policy_document.vic_s3_public_policy.json
+}
+
+data "aws_iam_policy_document" "vic_s3_public_policy" {
+  statement {
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "${module.vic_s3_public.arn}/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
 }
