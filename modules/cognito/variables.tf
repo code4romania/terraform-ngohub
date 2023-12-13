@@ -147,3 +147,9 @@ variable "email_contact" {
   type        = string
   default     = null
 }
+
+variable "email_from" {
+  description = "Email address where emails are sent from."
+  type        = string
+  default     = null
+}

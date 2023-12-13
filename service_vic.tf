@@ -30,6 +30,7 @@ module "vic_cognito" {
   sms_external_id = local.isProduction ? "VIC" : "VIC-test"
 
   email_contact = var.email_contact
+  email_from    = local.mail_from
 
   facebook_provider_client_id     = var.vic_facebook_provider_client_id
   facebook_provider_client_secret = var.vic_facebook_provider_client_secret
