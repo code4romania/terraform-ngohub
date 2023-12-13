@@ -54,6 +54,7 @@ module "ngohub_frontend" {
     REACT_APP_FRONTEND_URL         = "https://${local.ngohub.frontend.domain}"
     REACT_APP_USER_POOL_CLIENT_ID  = module.ngohub_cognito.user_pool_client_id
     REACT_APP_USER_POOL_ID         = module.ngohub_cognito.user_pool_id
+    REACT_APP_PUBLIC_ASSETS_URL    = module.s3_public.bucket_regional_domain_name
   }
 
   build_spec = <<-EOT
@@ -383,6 +384,21 @@ resource "aws_s3_object" "ngohub_email_assets" {
   key    = "email/${each.value}"
   source = "${path.module}/assets/email/${each.value}"
   etag   = filemd5("${path.module}/assets/email/${each.value}")
+
+  override_provider {
+    default_tags {
+      tags = {}
+    }
+  }
+}
+
+resource "aws_s3_object" "ngohub_public_assets" {
+  for_each = fileset("${path.module}/assets/file_templates", "**")
+
+  bucket = module.s3_public.bucket
+  key    = "file_templates/${each.value}"
+  source = "${path.module}/assets/file_templates/${each.value}"
+  etag   = filemd5("${path.module}/assets/file_templates/${each.value}")
 
   override_provider {
     default_tags {
