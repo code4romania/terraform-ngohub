@@ -14,8 +14,8 @@ module "vic_cognito" {
   backend_domain  = local.vic.backend.domain
   frontend_domain = local.vic.frontend.domain
 
-  ui_css  = file("${path.module}/ui/custom.css")
-  ui_logo = filebase64("${path.module}/ui/vic.png")
+  ui_css  = file("${path.module}/assets/cognito/custom.css")
+  ui_logo = filebase64("${path.module}/assets/cognito/vic.png")
 
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
