@@ -29,8 +29,9 @@ module "vic_cognito" {
   enable_sms      = true
   sms_external_id = local.isProduction ? "VIC" : "VIC-test"
 
-  email_contact = var.email_contact
-  email_from    = local.mail_from
+  email_contact    = var.email_contact
+  email_from       = local.mail_from
+  email_assets_url = "https://${module.vic_s3_public.bucket_regional_domain_name}"
 
   facebook_provider_client_id     = var.vic_facebook_provider_client_id
   facebook_provider_client_secret = var.vic_facebook_provider_client_secret

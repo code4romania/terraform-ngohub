@@ -29,8 +29,9 @@ module "ngohub_cognito" {
   enable_sms      = true
   sms_external_id = local.isProduction ? "NGOHub" : "NGOHub-test"
 
-  email_contact = var.email_contact
-  email_from    = local.mail_from
+  email_contact    = var.email_contact
+  email_from       = local.mail_from
+  email_assets_url = "https://${module.s3_public.bucket_regional_domain_name}"
 }
 
 module "ngohub_frontend" {

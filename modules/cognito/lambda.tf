@@ -89,6 +89,7 @@ resource "aws_lambda_function" "amplify_login_custom_message" {
     variables = {
       onghub_frontend_url : var.frontend_domain
       email_contact : var.email_contact
+      email_assets_url : var.email_assets_url
     }
   }
 }

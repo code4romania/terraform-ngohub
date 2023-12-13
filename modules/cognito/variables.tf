@@ -153,3 +153,8 @@ variable "email_from" {
   type        = string
   default     = null
 }
+
+variable "email_assets_url" {
+  type    = string
+  default = null
+}
