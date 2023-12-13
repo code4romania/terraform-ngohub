@@ -27,7 +27,7 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
     margin: 0 auto;
   ">
   <div>
-    <img src="${emailAssetsUrl}/header_new.png" style="width: 100%" />
+    <img src="${emailAssetsUrl}/email/header.png" style="width: 100%" />
   </div>
   <div id="content" style="padding: 1rem 5rem 3rem 1.5rem">
     <h1 style="margin-bottom: 1.5rem; color: #000000 !important">
@@ -67,7 +67,7 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
           </p>
         </td>
         <td>
-          <img class="logo" style="width:140px" src="${emailAssetsUrl}/code4romania_logo_new.png" />
+          <img class="logo" style="width:140px" src="${emailAssetsUrl}/email/logo.png" />
         </td>
       </tr>
     </table>
@@ -96,20 +96,20 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
         <td>
           <a style="text-decoration: none; color: #1a15ea" href="https://www.facebook.com/code4romania/"
             target="_blank">
-            <img style="margin: 0 1rem" src="${emailAssetsUrl}/facebook_logo.png" /></a>
+            <img style="margin: 0 1rem" src="${emailAssetsUrl}/email/social/facebook.png" /></a>
         </td>
         <td>
           <a style="text-decoration: none; color: #1a15ea" href="https://www.instagram.com/code4romania"
             target="_blank">
-            <img style="margin: 0 1rem" src="${emailAssetsUrl}/instagram_logo.png" /></a>
+            <img style="margin: 0 1rem" src="${emailAssetsUrl}/email/social/instagram.png" /></a>
         </td>
         <td>
           <a style="text-decoration: none; color: #1a15ea" href="https://www.youtube.com/@codeforromania5856" target="_blank">
-            <img style="margin: 0 1rem" src="${emailAssetsUrl}/youtube_logo.png" /></a>
+            <img style="margin: 0 1rem" src="${emailAssetsUrl}/email/social/youtube.png" /></a>
         </td>
         <td>
           <a style="text-decoration: none; color: #1a15ea" href="https://github.com/code4romania/" target="_blank">
-            <img style="margin: 0 1rem" src="${emailAssetsUrl}/github_logo.png" /></a>
+            <img style="margin: 0 1rem" src="${emailAssetsUrl}/email/social/github.png" /></a>
         </td>
       </tr>
     </table>
@@ -146,7 +146,7 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
         margin: 0 auto;
       ">
         <div>
-            <img src="${emailAssetsUrl}/header_new.png" style="width: 100%" />
+            <img src="${emailAssetsUrl}/email/header.png" style="width: 100%" />
         </div>
         <div style="padding: 1rem 5rem 3rem 5rem">
             <h1 style="margin-bottom: 1.5rem; color: #000000 !important">
@@ -200,7 +200,7 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
                   </td>
                   <td>
                       <img class="logo" style="width:140px"
-                          src="${emailAssetsUrl}/code4romania_logo_new.png" />
+                          src="${emailAssetsUrl}/email/logo.png" />
                   </td>
               </tr>
           </table>
@@ -224,24 +224,24 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
                       <a style="text-decoration: none; color: #1a15ea" href="https://www.facebook.com/code4romania/"
                           target="_blank">
                           <img style="margin: 0 1rem"
-                              src="${emailAssetsUrl}/facebook_logo.png" /></a>
+                              src="${emailAssetsUrl}/email/social/facebook.png" /></a>
                   </td>
                   <td>
                       <a style="text-decoration: none; color: #1a15ea" href="https://www.instagram.com/code4romania"
                           target="_blank">
                           <img style="margin: 0 1rem"
-                              src="${emailAssetsUrl}/instagram_logo.png" /></a>
+                              src="${emailAssetsUrl}/email/social/instagram.png" /></a>
                   </td>
                   <td>
                       <a style="text-decoration: none; color: #1a15ea" href="https://www.youtube.com/@codeforromania5856" target="_blank">
                           <img style="margin: 0 1rem"
-                              src="${emailAssetsUrl}/youtube_logo.png" /></a>
+                              src="${emailAssetsUrl}/email/social/youtube.png" /></a>
                   </td>
                   <td>
                       <a style="text-decoration: none; color: #1a15ea" href="https://github.com/code4romania/"
                           target="_blank">
                           <img style="margin: 0 1rem"
-                              src="${emailAssetsUrl}/github_logo.png" /></a>
+                              src="${emailAssetsUrl}/email/social/github.png" /></a>
                   </td>
               </tr>
           </table>

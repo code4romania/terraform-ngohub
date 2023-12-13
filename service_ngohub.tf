@@ -375,3 +375,18 @@ data "aws_iam_policy_document" "ngohub_s3_public_policy" {
     }
   }
 }
+
+resource "aws_s3_object" "ngohub_email_assets" {
+  for_each = fileset("${path.module}/assets/email", "**")
+
+  bucket = module.s3_public.bucket
+  key    = "email/${each.value}"
+  source = "${path.module}/assets/email/${each.value}"
+  etag   = filemd5("${path.module}/assets/email/${each.value}")
+
+  override_provider {
+    default_tags {
+      tags = {}
+    }
+  }
+}
