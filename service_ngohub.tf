@@ -14,8 +14,8 @@ module "ngohub_cognito" {
   backend_domain  = local.ngohub.backend.domain
   frontend_domain = local.ngohub.frontend.domain
 
-  ui_css  = file("${path.module}/ui/custom.css")
-  ui_logo = filebase64("${path.module}/ui/ngohub.png")
+  ui_css  = file("${path.module}/assets/cognito/custom.css")
+  ui_logo = filebase64("${path.module}/assets/cognito/ngohub.png")
 
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
@@ -321,21 +321,72 @@ data "aws_iam_policy_document" "ngohub_iam_user_policy" {
 module "ngohub_s3_private" {
   source = "./modules/s3"
 
+  name = "${local.ngohub.namespace}-private"
+
   block_public_acls       = true
-  block_public_policy     = true
+  block_public_policy     = false
   ignore_public_acls      = true
   restrict_public_buckets = true
+  policy                  = data.aws_iam_policy_document.ngohub_s3_private_policy.json
+}
 
-  name = "${local.ngohub.namespace}-private"
+data "aws_iam_policy_document" "ngohub_s3_private_policy" {
+  statement {
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "${module.ngohub_s3_private.arn}/*/logo/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
 }
 
 module "s3_public" {
   source = "./modules/s3"
 
+  name = "${local.ngohub.namespace}-public"
+
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
   restrict_public_buckets = false
+  policy                  = data.aws_iam_policy_document.ngohub_s3_public_policy.json
+}
 
-  name = "${local.ngohub.namespace}-public"
+data "aws_iam_policy_document" "ngohub_s3_public_policy" {
+  statement {
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "${module.s3_public.arn}/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+}
+
+resource "aws_s3_object" "ngohub_email_assets" {
+  for_each = fileset("${path.module}/assets/email", "**")
+
+  bucket = module.s3_public.bucket
+  key    = "email/${each.value}"
+  source = "${path.module}/assets/email/${each.value}"
+  etag   = filemd5("${path.module}/assets/email/${each.value}")
+
+  override_provider {
+    default_tags {
+      tags = {}
+    }
+  }
 }

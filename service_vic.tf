@@ -14,8 +14,8 @@ module "vic_cognito" {
   backend_domain  = local.vic.backend.domain
   frontend_domain = local.vic.frontend.domain
 
-  ui_css  = file("${path.module}/ui/custom.css")
-  ui_logo = filebase64("${path.module}/ui/vic.png")
+  ui_css  = file("${path.module}/assets/cognito/custom.css")
+  ui_logo = filebase64("${path.module}/assets/cognito/vic.png")
 
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
@@ -398,21 +398,73 @@ data "aws_iam_policy_document" "vic_iam_user_policy" {
 module "vic_s3_private" {
   source = "./modules/s3"
 
+  name = "${local.vic.namespace}-private"
+
   block_public_acls       = true
-  block_public_policy     = true
+  block_public_policy     = false
   ignore_public_acls      = true
   restrict_public_buckets = true
-
-  name = "${local.vic.namespace}-private"
+  policy                  = data.aws_iam_policy_document.vic_s3_private_policy.json
 }
+
+data "aws_iam_policy_document" "vic_s3_private_policy" {
+  statement {
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "${module.vic_s3_private.arn}/*/logo/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+}
+
 
 module "vic_s3_public" {
   source = "./modules/s3"
+
+  name = "${local.vic.namespace}-public"
 
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
   restrict_public_buckets = false
+  policy                  = data.aws_iam_policy_document.vic_s3_public_policy.json
+}
 
-  name = "${local.vic.namespace}-public"
+data "aws_iam_policy_document" "vic_s3_public_policy" {
+  statement {
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "${module.vic_s3_public.arn}/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
+}
+
+resource "aws_s3_object" "vic_email_assets" {
+  for_each = fileset("${path.module}/assets/email", "**")
+
+  bucket = module.s3_public.bucket
+  key    = "email/${each.value}"
+  source = "${path.module}/assets/email/${each.value}"
+  etag   = filemd5("${path.module}/assets/email/${each.value}")
+
+  override_provider {
+    default_tags {
+      tags = {}
+    }
+  }
 }
