@@ -321,25 +321,42 @@ data "aws_iam_policy_document" "ngohub_iam_user_policy" {
 module "ngohub_s3_private" {
   source = "./modules/s3"
 
+  name = "${local.ngohub.namespace}-private"
+
   block_public_acls       = true
-  block_public_policy     = true
+  block_public_policy     = false
   ignore_public_acls      = true
   restrict_public_buckets = true
+  policy                  = data.aws_iam_policy_document.ngohub_s3_private_policy.json
+}
 
-  name = "${local.ngohub.namespace}-private"
+data "aws_iam_policy_document" "ngohub_s3_private_policy" {
+  statement {
+    actions = [
+      "s3:GetObject",
+    ]
+
+    resources = [
+      "${module.ngohub_s3_private.arn}/*/logo/*",
+    ]
+
+    principals {
+      type        = "*"
+      identifiers = ["*"]
+    }
+  }
 }
 
 module "s3_public" {
   source = "./modules/s3"
 
+  name = "${local.ngohub.namespace}-public"
+
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
   restrict_public_buckets = false
-
-  name = "${local.ngohub.namespace}-public"
-
-  policy = data.aws_iam_policy_document.ngohub_s3_public_policy.json
+  policy                  = data.aws_iam_policy_document.ngohub_s3_public_policy.json
 }
 
 data "aws_iam_policy_document" "ngohub_s3_public_policy" {
