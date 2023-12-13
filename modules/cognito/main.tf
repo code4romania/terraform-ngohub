@@ -65,7 +65,7 @@ resource "aws_cognito_user_pool" "this" {
   email_configuration {
     email_sending_account = "DEVELOPER"
     source_arn            = var.ses_identiy_arn
-    from_email_address    = "no-reply@${var.email_domain}"
+    from_email_address    = var.email_from
   }
 
   password_policy {

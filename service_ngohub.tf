@@ -30,6 +30,7 @@ module "ngohub_cognito" {
   sms_external_id = local.isProduction ? "NGOHub" : "NGOHub-test"
 
   email_contact = var.email_contact
+  email_from    = local.mail_from
 }
 
 module "ngohub_frontend" {
