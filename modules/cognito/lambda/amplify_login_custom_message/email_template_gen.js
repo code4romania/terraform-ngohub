@@ -29,7 +29,7 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
   <div>
     <img src="${emailAssetsUrl}/header.png" style="width: 100%" />
   </div>
-  <div id="content" style="padding: 1rem 5rem 3rem 5rem">
+  <div id="content" style="padding: 1rem 5rem 3rem 1.5rem">
     <h1 style="margin-bottom: 1.5rem; color: #000000 !important">
       Codul tău de verificare
     </h1>
@@ -189,7 +189,7 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
         <div style="
         background-color: #000000;
         color: #ffffff !important;
-        padding: 1.5rem 5rem;
+        padding: 1.5rem 1.5rem;
         ">
           <table style="width: 80%; border: none; margin-left: auto; margin-right: auto; padding-bottom: 1rem">
               <tr>
