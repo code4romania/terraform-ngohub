@@ -26,11 +26,11 @@ const TOP = `
         margin: 0 auto;
       ">
         <div>
-            <img src="https://onghub-dev-files.s3.eu-central-1.amazonaws.com/public/header.png" style="width: 100%" />
+            <img src="https://ngohub-staging-public-ttbo.s3.eu-west-1.amazonaws.com/header.png" style="width: 100%" />
         </div>
 `
 
-const BOTTOM = `
+const BOTTOM = (contactEmail) => `
 <div style="
 background-color: #000000;
 color: #ffffff !important;
@@ -45,7 +45,7 @@ padding: 1.5rem 5rem;
           </td>
           <td>
               <img class="logo"
-                  src="https://onghub-dev-files.s3.eu-central-1.amazonaws.com/public/code4romania_logo.png" />
+                  src="https://ngohub-staging-public-ttbo.s3.eu-west-1.amazonaws.com/code4romania_logo.png" />
           </td>
       </tr>
   </table>
@@ -60,7 +60,7 @@ padding: 1.5rem 5rem;
   margin-top: 1.5rem
 ">
       Dacă vrei să iei legătura cu noi o poți face pe e-mail la adresa:
-      <a style="color: #ffffff !important; font-size: 0.75rem;" href="contact@code4.ro">contact@code4.ro</a>
+      <a style="color: #ffffff !important; font-size: 0.75rem;" href="mailto:${contactEmail}">${contactEmail}</a>
   </p>
 
   <table style="width: 50%; border: none; margin-left: auto; margin-right: auto; padding-top: 1rem">
@@ -69,24 +69,24 @@ padding: 1.5rem 5rem;
               <a style="text-decoration: none; color: #1a15ea" href="https://www.facebook.com/code4romania/"
                   target="_blank">
                   <img style="margin: 0 1rem"
-                      src="https://onghub-dev-files.s3.eu-central-1.amazonaws.com/public/facebook_logo.png" /></a>
+                      src="https://ngohub-staging-public-ttbo.s3.eu-west-1.amazonaws.com/facebook_logo.png" /></a>
           </td>
           <td>
               <a style="text-decoration: none; color: #1a15ea" href="https://www.instagram.com/code4romania"
                   target="_blank">
                   <img style="margin: 0 1rem"
-                      src="https://onghub-dev-files.s3.eu-central-1.amazonaws.com/public/instagram_logo.png" /></a>
+                      src="https://ngohub-staging-public-ttbo.s3.eu-west-1.amazonaws.com/instagram_logo.png" /></a>
           </td>
           <td>
               <a style="text-decoration: none; color: #1a15ea" href="/" target="_blank">
                   <img style="margin: 0 1rem"
-                      src="https://onghub-dev-files.s3.eu-central-1.amazonaws.com/public/youtube_logo.png" /></a>
+                      src="https://ngohub-staging-public-ttbo.s3.eu-west-1.amazonaws.com/youtube_logo.png" /></a>
           </td>
           <td>
               <a style="text-decoration: none; color: #1a15ea" href="https://github.com/code4romania/"
                   target="_blank">
                   <img style="margin: 0 1rem"
-                      src="https://onghub-dev-files.s3.eu-central-1.amazonaws.com/public/github_logo.png" /></a>
+                      src="https://ngohub-staging-public-ttbo.s3.eu-west-1.amazonaws.com/github_logo.png" /></a>
           </td>
       </tr>
   </table>
@@ -98,7 +98,7 @@ padding: 1.5rem 5rem;
 </body>
 `
 
-const FORGOT_PASSWORD_CONTENT = (codeParameter) => `
+const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail) => `
         ${TOP}
         <div id="content" style="padding: 1rem 5rem 3rem 5rem">
             <h1 style="margin-bottom: 1.5rem; color: #000000 !important">Codul tău de verificare</h1>
@@ -110,13 +110,13 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter) => `
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
                 Dacă întâmpini vreo problemă ne poți transmite un email pe adresa
                 <a style="text-decoration: none; color: #1a15ea; font-size: 1rem; line-height: 1.5rem;"
-                    href="mailto:contact@onghub.ro">contact@onghub.ro</a>.
+                    href="mailto:${contactEmail}">${contactEmail}</a>.
             </p>
         </div>
-        ${BOTTOM}
+        ${BOTTOM(contactEmail)}
 `
 
-const USER_INVITE_CONTENT = (username, tempPassword, inviteLink) => `
+const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail) => `
         ${TOP}
         <div style="padding: 1rem 5rem 3rem 5rem">
             <h1 style="margin-bottom: 1.5rem; color: #000000 !important">
@@ -138,7 +138,7 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink) => `
               color: #1a15ea;
               font-size: 1rem;
               line-height: 1.5rem;
-            " href="mailto:contact@onghub.ro">contact@onghub.ro</a>.
+            " href="mailto:${contactEmail}">${contactEmail}</a>.
             </p>
             <a href="${inviteLink}" target="_blank">
                 <button style="
