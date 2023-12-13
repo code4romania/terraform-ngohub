@@ -27,7 +27,7 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
     margin: 0 auto;
   ">
   <div>
-    <img src="${emailAssetsUrl}/header.png" style="width: 100%" />
+    <img src="${emailAssetsUrl}/header_new.png" style="width: 100%" />
   </div>
   <div id="content" style="padding: 1rem 5rem 3rem 1.5rem">
     <h1 style="margin-bottom: 1.5rem; color: #000000 !important">
@@ -67,7 +67,7 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
           </p>
         </td>
         <td>
-          <img class="logo" src="${emailAssetsUrl}/code4romania_logo.png" />
+          <img class="logo" style="width:140px" src="${emailAssetsUrl}/code4romania_logo_new.png" />
         </td>
       </tr>
     </table>
@@ -146,7 +146,7 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
         margin: 0 auto;
       ">
         <div>
-            <img src="${emailAssetsUrl}/header.png" style="width: 100%" />
+            <img src="${emailAssetsUrl}/header_new.png" style="width: 100%" />
         </div>
         <div style="padding: 1rem 5rem 3rem 5rem">
             <h1 style="margin-bottom: 1.5rem; color: #000000 !important">
@@ -199,8 +199,8 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
                       </p>
                   </td>
                   <td>
-                      <img class="logo"
-                          src="${emailAssetsUrl}/code4romania_logo.png" />
+                      <img class="logo" style="width:140px"
+                          src="${emailAssetsUrl}/code4romania_logo_new.png" />
                   </td>
               </tr>
           </table>
