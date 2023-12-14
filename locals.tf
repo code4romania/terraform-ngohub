@@ -22,6 +22,10 @@ locals {
 
     backend = {
       domain = "api${local.env_suffix}.${var.root_domain}"
+      image = {
+        repo = data.aws_ecr_repository.ngohub_backend.repository_url
+        tag  = "develop"
+      }
     }
 
     frontend = {
@@ -38,6 +42,10 @@ locals {
 
     backend = {
       domain = "api-vic${local.env_suffix}.${var.root_domain}"
+      image = {
+        repo = data.aws_ecr_repository.vic_backend.repository_url
+        tag  = "develop"
+      }
     }
 
     frontend = {
