@@ -88,8 +88,8 @@ module "ngohub_backend" {
   min_capacity = 1
   max_capacity = 3
 
-  image_repo = data.aws_ecr_repository.ngohub_backend.repository_url
-  image_tag  = var.ngohub_backend_tag
+  image_repo = local.ngohub.backend.image.repo
+  image_tag  = local.ngohub.backend.image.tag
 
   use_load_balancer       = true
   lb_dns_name             = aws_lb.main.dns_name
