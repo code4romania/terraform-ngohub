@@ -90,3 +90,9 @@ variable "vic_google_provider_client_secret" {
   default     = null
   sensitive   = true
 }
+
+variable "ngohub_landing_url" {
+  description = "URL to the landing page of the NGOHub (the one with Website Factory)."
+  type        = string
+  default     = null
+}
