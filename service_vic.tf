@@ -403,7 +403,7 @@ module "vic_s3_private" {
   block_public_acls       = true
   block_public_policy     = false
   ignore_public_acls      = true
-  restrict_public_buckets = true
+  restrict_public_buckets = false
   policy                  = data.aws_iam_policy_document.vic_s3_private_policy.json
 }
 
