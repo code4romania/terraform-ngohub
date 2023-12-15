@@ -3,7 +3,7 @@ module "centrucivic_amplify" {
 
   name        = "centrucivic"
   repository  = "https://github.com/code4romania/centrucivic"
-  branch      = "develop"
+  branch      = local.isProduction ? "main" : "develop"
   environment = var.environment
 
   frontend_domain      = local.centrucivic.frontend.domain
