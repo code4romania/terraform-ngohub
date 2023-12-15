@@ -20,6 +20,10 @@ module "vic_cognito" {
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
 
+  # Settings this to false enables user felf-service sign-up in Cognito
+  # We don't want this for ngohub, but we do for vic
+  allow_admin_create_user_only = false
+
   username_attributes      = ["email", "phone_number"]
   auto_verified_attributes = ["email"]
 
