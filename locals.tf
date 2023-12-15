@@ -11,7 +11,7 @@ locals {
   }
 
   mail_domain = var.email_domain != null ? var.email_domain : var.root_domain
-  mail_from   = "\"NGO Hub\" <no-reply@${local.mail_domain}>"
+  mail_from   = "NGO Hub <no-reply@${local.mail_domain}>"
 
   ngohub = {
     namespace = "ngohub-${var.environment}"
