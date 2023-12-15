@@ -88,8 +88,8 @@ module "ngohub_backend" {
   min_capacity = 1
   max_capacity = 3
 
-  image_repo = data.aws_ecr_repository.ngohub_backend.repository_url
-  image_tag  = var.ngohub_backend_tag
+  image_repo = local.ngohub.backend.image.repo
+  image_tag  = local.ngohub.backend.image.tag
 
   use_load_balancer       = true
   lb_dns_name             = aws_lb.main.dns_name
@@ -327,7 +327,7 @@ module "ngohub_s3_private" {
   block_public_acls       = true
   block_public_policy     = false
   ignore_public_acls      = true
-  restrict_public_buckets = true
+  restrict_public_buckets = false
   policy                  = data.aws_iam_policy_document.ngohub_s3_private_policy.json
 }
 

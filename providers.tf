@@ -6,21 +6,15 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket = "ngohub-staging-terraform-state"
-    key    = "terraform.tfstate"
-    region = "eu-west-1"
+  cloud {
+    organization = "code4romania"
+
+    workspaces {
+      tags = [
+        "ngohub",
+      ]
+    }
   }
-
-  # cloud {
-  #   organization = "code4romania"
-
-  #   workspaces {
-  #     tags = [
-  #       "ngohub",
-  #     ]
-  #   }
-  # }
 }
 
 provider "aws" {

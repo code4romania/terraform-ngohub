@@ -18,28 +18,6 @@ variable "bastion_public_key" {
   type        = string
 }
 
-variable "ngohub_backend_repo" {
-  description = "Docker image repository."
-  type        = string
-  default     = null
-}
-
-variable "ngohub_backend_tag" {
-  description = "Docker image tag."
-  type        = string
-}
-
-variable "vic_backend_repo" {
-  description = "Docker image repository."
-  type        = string
-  default     = null
-}
-
-variable "vic_backend_tag" {
-  description = "Docker image tag."
-  type        = string
-}
-
 variable "root_domain" {
   description = "Root domain name."
   type        = string
