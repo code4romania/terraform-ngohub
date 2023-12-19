@@ -59,14 +59,15 @@ resource "aws_cognito_user_pool_client" "vic_ngohub_client" {
     access_token = "days"
   }
 
-  callback_urls = [
+  callback_urls = compact([
     "https://${local.vic.frontend.domain}",
     var.environment != "production" ? "http://localhost:3000" : null,
-  ]
-  logout_urls = [
+  ])
+
+  logout_urls = compact([
     "https://${local.vic.frontend.domain}",
     var.environment != "production" ? "http://localhost:3000" : null,
-  ]
+  ])
 
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]
