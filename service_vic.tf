@@ -20,6 +20,10 @@ module "vic_cognito" {
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
 
+  # Settings this to false enables user felf-service sign-up in Cognito
+  # We don't want this for ngohub, but we do for vic
+  allow_admin_create_user_only = false
+
   username_attributes      = ["email", "phone_number"]
   auto_verified_attributes = ["email"]
 
@@ -55,12 +59,15 @@ resource "aws_cognito_user_pool_client" "vic_ngohub_client" {
     access_token = "days"
   }
 
-  callback_urls = [
+  callback_urls = compact([
     "https://${local.vic.frontend.domain}",
-  ]
-  logout_urls = [
+    var.environment != "production" ? "http://localhost:3000" : null,
+  ])
+
+  logout_urls = compact([
     "https://${local.vic.frontend.domain}",
-  ]
+    var.environment != "production" ? "http://localhost:3000" : null,
+  ])
 
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]

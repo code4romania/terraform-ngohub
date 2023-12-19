@@ -20,6 +20,10 @@ module "ngohub_cognito" {
   hmac_api_key    = var.ngohub_hmac_api_key
   hmac_secret_key = var.ngohub_hmac_secret_key
 
+  # Settings this to false enables user felf-service sign-up in Cognito
+  # We don't want this for ngohub, but we do for vic
+  allow_admin_create_user_only = true
+
   username_attributes      = ["email"]
   auto_verified_attributes = ["email"]
 
@@ -55,6 +59,7 @@ module "ngohub_frontend" {
     REACT_APP_USER_POOL_CLIENT_ID  = module.ngohub_cognito.user_pool_client_id
     REACT_APP_USER_POOL_ID         = module.ngohub_cognito.user_pool_id
     REACT_APP_PUBLIC_ASSETS_URL    = module.s3_public.bucket_regional_domain_name
+    REACT_APP_HOME_URL             = var.ngohub_landing_url
   }
 
   build_spec = <<-EOT
