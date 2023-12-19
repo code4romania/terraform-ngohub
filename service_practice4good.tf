@@ -3,7 +3,7 @@ module "practice4good_amplify" {
 
   name        = "practice4good"
   repository  = "https://github.com/code4romania/practice-for-good"
-  branch      = "develop"
+  branch      = local.isProduction ? "main" : "develop"
   environment = var.environment
 
   frontend_domain      = local.practice4good.frontend.domain

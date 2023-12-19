@@ -96,7 +96,7 @@ module "vic_frontend" {
 
   name        = "vic"
   repository  = "https://github.com/code4romania/vic"
-  branch      = "develop"
+  branch      = local.isProduction ? "main" : "develop"
   environment = var.environment
 
   frontend_domain = local.vic.frontend.domain
