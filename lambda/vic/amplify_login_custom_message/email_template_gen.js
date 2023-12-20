@@ -238,5 +238,5 @@ module.exports = {
   getForgotPasswordEmailTemplate: FORGOT_PASSWORD_CONTENT,
   getForgotPasswordEmailTitle: () => 'Codul tău de verificare',
   getInviteUserEmailTemplate: USER_INVITE_CONTENT,
-  getInviteUserEmailTitle: (username) => 'Bun venit in ONGHub!'
+  getInviteUserEmailTitle: (username) => 'Bun venit in VIC!'
 }
