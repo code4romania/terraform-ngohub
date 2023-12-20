@@ -26,8 +26,8 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
     max-width: 700px;
     margin: 0 auto;
   ">
-  <div>
-    <img src="${emailAssetsUrl}/email/header.png" style="width: 100%" />
+  <div style='width: 100%; background-color: black; padding: 1rem 1.5rem;'>
+      <img src="${emailAssetsUrl}/email/vic-logo.png" />
   </div>
   <div id="content" style="padding: 1rem 5rem 3rem 1.5rem">
     <h1 style="margin-bottom: 1.5rem; color: #000000 !important">
@@ -51,7 +51,8 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
   <div style="
       background-color: #000000;
       color: #ffffff !important;
-      padding: 1.5rem 5rem;
+      padding: 1rem 1.5rem;
+      width: 100%;
     ">
     <table style="
         width: 80%;
@@ -118,7 +119,7 @@ const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) =>
 </body>
 `
 
-const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, emailAssetsUrl) => `
+const USER_INVITE_CONTENT = (username, codeParameter, contactEmail, emailAssetsUrl) => `
     <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <style>
@@ -145,24 +146,21 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
         max-width: 700px;
         margin: 0 auto;
       ">
-        <div>
-            <img src="${emailAssetsUrl}/email/header.png" style="width: 100%" />
+        <div style='width: 100%; background-color: black; padding: 1rem 1.5rem;'>
+            <img src="${emailAssetsUrl}/email/vic-logo.png" />
         </div>
+
         <div style="padding: 1rem 5rem 3rem 5rem">
             <h1 style="margin-bottom: 1.5rem; color: #000000 !important">
-                Parola ta temporară
+                Codul tau de confirmare
             </h1>
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
                 Bună,<br /><br />
-                Contul tău de NGO Hub a fost creat cu success. Pentru a te loga în
-                aplicație te rugăm să accesezi ONGHub apasand butonul de mai jos si sa folosești urmatoarele credențialele temporare:<br /><br />Username:
-                <strong>${username}</strong><br />Parola temporară:
-                <strong>${tempPassword}</strong>
+                Contul tău de VIC a fost creat cu success. Foloseste codul de mai jos pentru a confirma inregistrarea.<br /><br />
+                Cod de confirmare: <strong>${codeParameter}</strong>
             </p>
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
-                Nu uita să îți schimbi parola unică pentru a accesa ecosistemul dedicat
-                societății civile creat de Code for Romania. Dacă întâmpini vreo
-                problemă ne poți transmite un email pe adresa
+                Dacă întâmpini vreo problemă ne poți transmite un email pe adresa
                 <a style="
               text-decoration: none;
               color: #1a15ea;
@@ -170,26 +168,12 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
               line-height: 1.5rem;
             " href="mailto:${contactEmail}">${contactEmail}</a>.
             </p>
-            <a href="${inviteLink}" target="_blank">
-                <button style="
-              min-width: fit-content;
-              padding: 10px 17px;
-              color: #000000;
-              background-color: #fff649;
-              width: 8rem;
-              height: 2.5rem;
-              border-radius: 6px;
-              border-width: 0;
-              cursor: pointer;
-            " type="button">
-                    Acceseaza ONGHub
-                </button>
-            </a>
         </div>
         <div style="
         background-color: #000000;
         color: #ffffff !important;
-        padding: 1.5rem 1.5rem;
+        padding: 1rem 1.5rem;
+        width: 100%;
         ">
           <table style="width: 80%; border: none; margin-left: auto; margin-right: auto; padding-bottom: 1rem">
               <tr>
