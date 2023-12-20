@@ -21,9 +21,3 @@ data "archive_file" "vic_amplify_login_custom_message" {
   source_dir  = "${path.module}/lambda/vic/amplify_login_custom_message"
   output_path = "${path.module}/lambda/vic/amplify_login_custom_message.zip"
 }
-
-data "archive_file" "vic_login_pre_authentication_check" {
-  type        = "zip"
-  source_dir  = "${path.module}/lambda/vic/login_pre_authentication_check"
-  output_path = "${path.module}/lambda/vic/login_pre_authentication_check.zip"
-}

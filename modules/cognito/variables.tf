@@ -165,26 +165,41 @@ variable "email_assets_url" {
 }
 
 variable "amplify_login_create_auth_challenge" {
-  type    = map(string)
+  type = object({
+    output_path         = string
+    output_base64sha256 = string
+  })
   default = null
 }
 
 variable "amplify_login_define_auth_challenge" {
-  type    = map(string)
+  type = object({
+    output_path         = string
+    output_base64sha256 = string
+  })
   default = null
 }
 
 variable "amplify_login_verify_auth_challenge_response" {
-  type    = map(string)
+  type = object({
+    output_path         = string
+    output_base64sha256 = string
+  })
   default = null
 }
 
 variable "amplify_login_custom_message" {
-  type    = map(string)
+  type = object({
+    output_path         = string
+    output_base64sha256 = string
+  })
   default = null
 }
 
 variable "login_pre_authentication_check" {
-  type    = map(string)
+  type = object({
+    output_path         = string
+    output_base64sha256 = string
+  })
   default = null
 }
