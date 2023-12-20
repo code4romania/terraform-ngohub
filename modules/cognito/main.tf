@@ -78,10 +78,10 @@ resource "aws_cognito_user_pool" "this" {
   }
 
   lambda_config {
-    create_auth_challenge          = aws_lambda_function.amplify_login_create_auth_challenge.arn
-    define_auth_challenge          = aws_lambda_function.amplify_login_define_auth_challenge.arn
-    verify_auth_challenge_response = aws_lambda_function.amplify_login_verify_auth_challenge_response.arn
-    custom_message                 = aws_lambda_function.amplify_login_custom_message.arn
+    create_auth_challenge          = try(aws_lambda_function.amplify_login_create_auth_challenge[0].arn, null)
+    define_auth_challenge          = try(aws_lambda_function.amplify_login_define_auth_challenge[0].arn, null)
+    verify_auth_challenge_response = try(aws_lambda_function.amplify_login_verify_auth_challenge_response[0].arn, null)
+    custom_message                 = try(aws_lambda_function.amplify_login_custom_message[0].arn, null)
   }
 }
 

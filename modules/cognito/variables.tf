@@ -163,3 +163,28 @@ variable "email_assets_url" {
   type    = string
   default = null
 }
+
+variable "amplify_login_create_auth_challenge" {
+  type    = map(string)
+  default = null
+}
+
+variable "amplify_login_define_auth_challenge" {
+  type    = map(string)
+  default = null
+}
+
+variable "amplify_login_verify_auth_challenge_response" {
+  type    = map(string)
+  default = null
+}
+
+variable "amplify_login_custom_message" {
+  type    = map(string)
+  default = null
+}
+
+variable "login_pre_authentication_check" {
+  type    = map(string)
+  default = null
+}

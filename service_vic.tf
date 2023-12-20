@@ -47,6 +47,11 @@ module "vic_cognito" {
     "vic://",
     local.isProduction ? null : "exp://192.168.68.61:8081",
   ]
+
+  amplify_login_create_auth_challenge          = data.archive_file.vic_amplify_login_create_auth_challenge
+  amplify_login_define_auth_challenge          = data.archive_file.vic_amplify_login_define_auth_challenge
+  amplify_login_verify_auth_challenge_response = data.archive_file.vic_amplify_login_verify_auth_challenge_response
+  amplify_login_custom_message                 = data.archive_file.vic_amplify_login_custom_message
 }
 
 resource "aws_cognito_user_pool_client" "vic_ngohub_client" {
