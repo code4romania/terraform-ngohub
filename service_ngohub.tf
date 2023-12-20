@@ -36,6 +36,12 @@ module "ngohub_cognito" {
   email_contact    = var.email_contact
   email_from       = local.mail_from
   email_assets_url = "https://${module.s3_public.bucket_regional_domain_name}"
+
+  amplify_login_create_auth_challenge          = data.archive_file.ngohub_amplify_login_create_auth_challenge
+  amplify_login_define_auth_challenge          = data.archive_file.ngohub_amplify_login_define_auth_challenge
+  amplify_login_verify_auth_challenge_response = data.archive_file.ngohub_amplify_login_verify_auth_challenge_response
+  amplify_login_custom_message                 = data.archive_file.ngohub_amplify_login_custom_message
+  login_pre_authentication_check               = data.archive_file.ngohub_login_pre_authentication_check
 }
 
 module "ngohub_frontend" {
