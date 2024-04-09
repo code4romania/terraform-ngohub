@@ -114,7 +114,7 @@ module "vic_frontend" {
     VITE_API_URL          = "https://${local.vic.backend.domain}"
     VITE_APP_FRONTEND_URL = "https://${local.vic.frontend.domain}"
 
-    # ONGHub User Pool for VIC Client
+    # NGO Hub User Pool for VIC Client
     VITE_AWS_REGION           = var.region
     VITE_COGNITO_OAUTH_DOMAIN = module.ngohub_cognito.oauth_domain
     VITE_USER_POOL_CLIENT_ID  = aws_cognito_user_pool_client.vic_ngohub_client.id

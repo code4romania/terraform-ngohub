@@ -1,4 +1,3 @@
-
 const FORGOT_PASSWORD_CONTENT = (codeParameter, contactEmail, emailAssetsUrl) => `
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
@@ -154,15 +153,20 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
             </h1>
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
                 Bună,<br /><br />
-                Contul tău de NGO Hub a fost creat cu success. Pentru a te loga în
-                aplicație te rugăm să accesezi ONGHub apasand butonul de mai jos si sa folosești urmatoarele credențialele temporare:<br /><br />Username:
-                <strong>${username}</strong><br />Parola temporară:
+                Contul tău de NGO Hub a fost creat cu success.
+                Pentru a te loga în aplicație te rugăm să accesezi NGO Hub apăsând butonul de mai jos
+                (sau link-ul de mai jos)
+                și să folosești următoarele credențialele temporare:
+                <br /><br />
+                Username:
+                <strong>${username}</strong><br />
+                Parola temporară:
                 <strong>${tempPassword}</strong>
             </p>
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
                 Nu uita să îți schimbi parola unică pentru a accesa ecosistemul dedicat
-                societății civile creat de Code for Romania. Dacă întâmpini vreo
-                problemă ne poți transmite un email pe adresa
+                societății civile creat de Code for Romania.
+                Dacă întâmpini vreo problemă ne poți transmite un email pe adresa
                 <a style="
               text-decoration: none;
               color: #1a15ea;
@@ -170,21 +174,36 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
               line-height: 1.5rem;
             " href="mailto:${contactEmail}">${contactEmail}</a>.
             </p>
-            <a href="${inviteLink}" target="_blank">
-                <button style="
-              min-width: fit-content;
-              padding: 10px 17px;
-              color: #000000;
-              background-color: #fff649;
-              width: 8rem;
-              height: 2.5rem;
-              border-radius: 6px;
-              border-width: 0;
-              cursor: pointer;
-            " type="button">
-                    Acceseaza ONGHub
-                </button>
+            <a href="${inviteLink}"
+              target="_blank"
+              style="
+                min-width: fit-content;
+                padding: 10px 17px;
+                color: #000000;
+                background-color: #fff649;
+                width: 8rem;
+                height: 2.5rem;
+                border-radius: 6px;
+                border-width: 0;
+                cursor: pointer;
+            ">
+              Accesează NGO Hub
             </a>
+                <p style="
+                    font-size: 1rem;
+                    line-height: 1.5rem;
+                    color: #000000 !important;
+                    margin-top: 1rem;
+                  ">
+                    Sau accesează link-ul de mai jos:
+                    <a style="
+                      text-decoration: none;
+                      color: #1a15ea;
+                      font-size: 1rem;
+                      line-height: 1.5rem;
+                    "
+                    href="${inviteLink}">${inviteLink}</a>
+                </p>
         </div>
         <div style="
         background-color: #000000;
@@ -223,24 +242,24 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
                   <td>
                       <a style="text-decoration: none; color: #1a15ea" href="https://www.facebook.com/code4romania/"
                           target="_blank">
-                          <img style="margin: 0 1rem"
+                          <img style="margin: 0 1rem" alt="Facebook"
                               src="${emailAssetsUrl}/email/social/facebook.png" /></a>
                   </td>
                   <td>
                       <a style="text-decoration: none; color: #1a15ea" href="https://www.instagram.com/code4romania"
                           target="_blank">
-                          <img style="margin: 0 1rem"
+                          <img style="margin: 0 1rem" alt="Instagram"
                               src="${emailAssetsUrl}/email/social/instagram.png" /></a>
                   </td>
                   <td>
                       <a style="text-decoration: none; color: #1a15ea" href="https://www.youtube.com/@codeforromania5856" target="_blank">
-                          <img style="margin: 0 1rem"
+                          <img style="margin: 0 1rem" alt="YouTube"
                               src="${emailAssetsUrl}/email/social/youtube.png" /></a>
                   </td>
                   <td>
                       <a style="text-decoration: none; color: #1a15ea" href="https://github.com/code4romania/"
                           target="_blank">
-                          <img style="margin: 0 1rem"
+                          <img style="margin: 0 1rem" alt="GitHub"
                               src="${emailAssetsUrl}/email/social/github.png" /></a>
                   </td>
               </tr>
@@ -254,5 +273,5 @@ module.exports = {
   getForgotPasswordEmailTemplate: FORGOT_PASSWORD_CONTENT,
   getForgotPasswordEmailTitle: () => 'Codul tău de verificare',
   getInviteUserEmailTemplate: USER_INVITE_CONTENT,
-  getInviteUserEmailTitle: (username) => 'Bun venit in ONGHub!'
+  getInviteUserEmailTitle: (username) => 'Bun venit in NGO Hub!'
 }
