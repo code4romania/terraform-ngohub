@@ -154,9 +154,7 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
                 Bună,<br /><br />
                 Contul tău de NGO Hub a fost creat cu success.
-                Pentru a te loga în aplicație te rugăm să accesezi NGO Hub apăsând butonul de mai jos
-                (sau link-ul de mai jos)
-                și să folosești următoarele credențialele temporare:
+                Ți-am pregătit o parolă temporară cu care îți poți activa contul pentru a-ți crea apoi parola ta unică.
                 <br /><br />
                 Username:
                 <strong>${username}</strong><br />
@@ -164,15 +162,9 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
                 <strong>${tempPassword}</strong>
             </p>
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
-                Nu uita să îți schimbi parola unică pentru a accesa ecosistemul dedicat
-                societății civile creat de Code for Romania.
-                Dacă întâmpini vreo problemă ne poți transmite un email pe adresa
-                <a style="
-              text-decoration: none;
-              color: #1a15ea;
-              font-size: 1rem;
-              line-height: 1.5rem;
-            " href="mailto:${contactEmail}">${contactEmail}</a>.
+                Parola temporară este generată automat, și conține caractere diverse.
+                Ai grijă când o copiezi,
+                să nu adaugi un spațiu în plus sau să selectezi un caracter în minus.
             </p>
             <a href="${inviteLink}"
               target="_blank"
@@ -189,21 +181,33 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
             ">
               Accesează NGO Hub
             </a>
-                <p style="
-                    font-size: 1rem;
-                    line-height: 1.5rem;
-                    color: #000000 !important;
-                    margin-top: 1rem;
-                  ">
-                    Sau accesează link-ul de mai jos:
-                    <a style="
-                      text-decoration: none;
-                      color: #1a15ea;
-                      font-size: 1rem;
-                      line-height: 1.5rem;
-                    "
-                    href="${inviteLink}">${inviteLink}</a>
-                </p>
+            <p style="
+                font-size: 1rem;
+                line-height: 1.5rem;
+                color: #000000 !important;
+                margin-top: 1rem;
+              ">
+                Sau accesează link-ul de mai jos:
+                <a style="
+                  text-decoration: none;
+                  color: #1a15ea;
+                  font-size: 1rem;
+                  line-height: 1.5rem;
+                "
+                href="${inviteLink}">${inviteLink}</a>
+            </p>
+            <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
+                După ce îți setezi parola ta unică, vei putea accesa toate soluțiile digitale disponibile în NGO Hub, folosind același cont unic.
+                <br>
+                Dacă întâmpini vreo problemă, ne poți scrie pe adresa
+                <a style="
+                  text-decoration: none;
+                  color: #1a15ea;
+                  font-size: 1rem;
+                  line-height: 1.5rem;
+                " href="mailto:${contactEmail}">${contactEmail}</a>.
+            </p>
+
         </div>
         <div style="
         background-color: #000000;
