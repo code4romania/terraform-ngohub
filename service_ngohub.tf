@@ -218,6 +218,10 @@ module "ngohub_backend" {
       name  = "AWS_S3_BUCKET_NAME_PUBLIC"
       value = module.s3_public.bucket_regional_domain_name
     },
+    {
+      name  = "SENTRY_DSN"
+      value = "https://4fd4562bbb7f94e16b3f79c4f96b6237@o375441.ingest.us.sentry.io/4507502912012288"
+    },
   ]
 
   secrets = [

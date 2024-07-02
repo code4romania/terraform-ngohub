@@ -23,7 +23,7 @@ exports.handler = async (event) => {
     }
 
     if (event.callerContext.clientId == process.env.onghub_cognito_client_id) {
-        // All users have access to ONGHub
+        // All users have access to NGO Hub
         console.log(`User ${event.request.userAttributes.email} can access ONGHUb`);
         return event;
     } else {
