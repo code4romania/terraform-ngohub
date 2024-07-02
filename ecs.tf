@@ -16,7 +16,7 @@ module "ecs_cluster" {
   maximum_scaling_step_size = 1
 
   target_capacity                          = 100
-  capacity_rebalance                       = true
+  capacity_rebalance                       = false
   on_demand_base_capacity                  = 0
   on_demand_percentage_above_base_capacity = 100
   ecs_cloudwatch_log_retention             = 30
