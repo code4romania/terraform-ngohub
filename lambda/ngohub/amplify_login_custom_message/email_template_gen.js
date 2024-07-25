@@ -152,15 +152,16 @@ const USER_INVITE_CONTENT = (username, tempPassword, inviteLink, contactEmail, e
                 Parola ta temporară
             </h1>
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
-                Bună,<br /><br />
+                Bună,
+            </p>
+            <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
                 Contul tău de NGO Hub a fost creat cu success.
                 Ți-am pregătit o parolă temporară cu care îți poți activa contul pentru a-ți crea apoi parola ta unică.
-                <br /><br />
-                Username:
-                <strong>${username}</strong><br />
-                Parola temporară:
-                <strong>${tempPassword}</strong>
             </p>
+            <p style="font-size: 1rem; line-height: 0.5rem; color: #000000 !important">Username:</p>
+            <p style="font-size: 1rem; font-weight: bold; line-height: 0.5rem; text-indent: 1.5rem; color: #000000 !important">${username}</p>
+            <p style="font-size: 1rem; line-height: 0.5rem; color: #000000 !important">Parola temporară:</p>
+            <p style="font-size: 1rem; font-weight: bold; line-height: 0.5rem; text-indent: 1.5rem; color: #000000 !important">${tempPassword}</p>
             <p style="font-size: 1rem; line-height: 1.5rem; color: #000000 !important">
                 Parola temporară este generată automat, și conține caractere diverse.
                 Ai grijă când o copiezi,
