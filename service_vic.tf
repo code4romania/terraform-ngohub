@@ -291,6 +291,10 @@ module "vic_backend" {
       name  = "AWS_REGION"
       value = var.region
     },
+    {
+      name  = "SENTRY_DSN"
+      value = var.sentry_dsn
+    },
   ]
 
   secrets = [
