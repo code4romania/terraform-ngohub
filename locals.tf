@@ -44,7 +44,7 @@ locals {
       domain = "api-vic${local.env_suffix}.${var.root_domain}"
       image = {
         repo = data.aws_ecr_repository.vic_backend.repository_url
-        tag  = "1.0.41"
+        tag  = "1.0.42"
       }
     }
 
