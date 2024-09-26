@@ -96,3 +96,8 @@ variable "ngohub_landing_url" {
   type        = string
   default     = null
 }
+
+variable "sentry_dsn" {
+  type      = string
+  sensitive = true
+}
