@@ -13,6 +13,11 @@ resource "aws_lambda_function" "pdf_generator" {
   source_code_hash = data.archive_file.pdf_generator.output_base64sha256
   memory_size      = 512
   timeout          = 30
+
+  vpc_config {
+    subnet_ids         = module.subnets.private_subnet_ids
+    security_group_ids = [aws_security_group.pdf_generator_lambda.id]
+  }
 }
 
 resource "aws_iam_role" "pdf_generator_lambda" {
@@ -71,4 +76,19 @@ resource "aws_api_gateway_method" "generate_pdf" {
   resource_id   = aws_api_gateway_resource.generate_pdf.id
   http_method   = "POST"
   authorization = "NONE"
+}
+
+
+resource "aws_security_group" "pdf_generator_lambda" {
+  name        = "${local.namespace}-pdf_generator_lambda"
+  description = "Security Group attached to the PDF generator lambda (${var.environment})"
+  vpc_id      = module.vpc.vpc_id
+
+
+  ingress {
+    protocol  = -1
+    self      = true
+    from_port = 0
+    to_port   = 0
+  }
 }
