@@ -54,3 +54,21 @@ data "aws_iam_policy_document" "pdf_generator_lambda_s3" {
     ]
   }
 }
+
+resource "aws_api_gateway_rest_api" "pdf_generator" {
+  name        = "${local.namespace}-pdf-generator"
+  description = "Generate a PDF from an HTML template"
+}
+
+resource "aws_api_gateway_resource" "generate_pdf" {
+  rest_api_id = aws_api_gateway_rest_api.pdf_generator.id
+  parent_id   = aws_api_gateway_rest_api.pdf_generator.root_resource_id
+  path_part   = "generate-pdf"
+}
+
+resource "aws_api_gateway_method" "generate_pdf" {
+  rest_api_id   = aws_api_gateway_rest_api.pdf_generator.id
+  resource_id   = aws_api_gateway_resource.generate_pdf.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
