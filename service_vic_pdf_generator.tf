@@ -63,6 +63,10 @@ data "aws_iam_policy_document" "pdf_generator_lambda_s3" {
 resource "aws_api_gateway_rest_api" "pdf_generator" {
   name        = "${local.namespace}-pdf-generator"
   description = "Generate a PDF from an HTML template"
+
+  endpoint_configuration {
+    types = ["PRIVATE"]
+  }
 }
 
 resource "aws_api_gateway_resource" "generate_pdf" {
