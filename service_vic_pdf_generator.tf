@@ -51,10 +51,10 @@ data "aws_iam_policy_document" "pdf_generator_lambda_role" {
 resource "aws_iam_role_policy" "pdf_generator_lambda_role" {
   name   = "s3-access"
   role   = aws_iam_role.pdf_generator_lambda.id
-  policy = data.aws_iam_policy_document.pdf_generator_lambda_s3.json
+  policy = data.aws_iam_policy_document.pdf_generator_lambda.json
 }
 
-data "aws_iam_policy_document" "pdf_generator_lambda_s3" {
+data "aws_iam_policy_document" "pdf_generator_lambda" {
   statement {
     actions = [
       "s3:ListBucket",
@@ -69,6 +69,24 @@ data "aws_iam_policy_document" "pdf_generator_lambda_s3" {
       module.vic_s3_private.arn,
       "${module.vic_s3_private.arn}/*",
     ]
+  }
+
+  statement {
+    actions = [
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:CreateNetworkInterface",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeInstances",
+      "ec2:AttachNetworkInterface"
+    ]
+
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "ec2:VpcID"
+      values   = [module.vpc.vpc_id]
+    }
   }
 }
 
