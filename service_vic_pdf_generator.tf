@@ -72,23 +72,11 @@ data "aws_iam_policy_document" "pdf_generator_lambda" {
   }
 
   statement {
+    // https://repost.aws/questions/QUbx7pdp-qTWWOiUb-WtEhFQ/resource-handler-returned-message-the-provided-execution-role-does-not-have-permissions-to-call-createnetworkinterface-on-ec2-service-lambda-status-code-400#AN5NU5MnorS1qSiMeGACMVlw
     actions = [
       "ec2:CreateNetworkInterface",
       "ec2:DeleteNetworkInterface",
       "ec2:AttachNetworkInterface",
-    ]
-
-    resources = ["*"]
-
-    condition {
-      test     = "ArnEquals"
-      variable = "ec2:Vpc"
-      values   = [module.vpc.vpc_arn]
-    }
-  }
-
-  statement {
-    actions = [
       "ec2:DescribeInstances",
       "ec2:DescribeNetworkInterfaces",
     ]
