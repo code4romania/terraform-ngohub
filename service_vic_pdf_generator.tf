@@ -18,6 +18,12 @@ resource "aws_lambda_function" "pdf_generator" {
     subnet_ids         = module.subnets.private_subnet_ids
     security_group_ids = [aws_security_group.pdf_generator_lambda.id]
   }
+
+  environment {
+    variables = {
+      S3_BUCKET = module.vic_s3_private.bucket
+    }
+  }
 }
 
 resource "aws_iam_role" "pdf_generator_lambda" {
