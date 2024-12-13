@@ -73,20 +73,27 @@ data "aws_iam_policy_document" "pdf_generator_lambda" {
 
   statement {
     actions = [
-      "ec2:DescribeNetworkInterfaces",
       "ec2:CreateNetworkInterface",
       "ec2:DeleteNetworkInterface",
-      "ec2:DescribeInstances",
-      "ec2:AttachNetworkInterface"
+      "ec2:AttachNetworkInterface",
     ]
 
     resources = ["*"]
 
     condition {
-      test     = "StringEquals"
-      variable = "ec2:VpcID"
-      values   = [module.vpc.vpc_id]
+      test     = "ArnEquals"
+      variable = "ec2:Vpc"
+      values   = [module.vpc.vpc_arn]
     }
+  }
+
+  statement {
+    actions = [
+      "ec2:DescribeInstances",
+      "ec2:DescribeNetworkInterfaces",
+    ]
+
+    resources = ["*"]
   }
 }
 
