@@ -12,7 +12,6 @@ resource "aws_s3_object" "pdf_generator" {
 
 resource "aws_lambda_function" "pdf_generator" {
   function_name = "${local.namespace}-pdf_generator"
-  filename      = data.archive_file.pdf_generator.output_path
   role          = aws_iam_role.pdf_generator_lambda.arn
   handler       = "index.handler"
   runtime       = "nodejs20.x"
