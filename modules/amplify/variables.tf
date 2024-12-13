@@ -36,3 +36,8 @@ variable "enable_www_subdomain" {
   type    = bool
   default = false
 }
+
+variable "basic_auth_credentials" {
+  type    = string
+  default = null
+}
