@@ -4,15 +4,22 @@ data "archive_file" "pdf_generator" {
   output_path = "${path.module}/lambda/vic/pdf_generator.zip"
 }
 
+resource "aws_s3_object" "pdf_generator" {
+  bucket = module.vic_s3_private.bucket
+  key    = "lambda/pdf_generator.zip"
+  source = data.archive_file.pdf_generator.output_path
+}
+
 resource "aws_lambda_function" "pdf_generator" {
-  function_name    = "${local.namespace}-pdf_generator"
-  filename         = data.archive_file.pdf_generator.output_path
-  role             = aws_iam_role.pdf_generator_lambda.arn
-  handler          = "index.handler"
-  runtime          = "nodejs20.x"
-  source_code_hash = data.archive_file.pdf_generator.output_base64sha256
-  memory_size      = 512
-  timeout          = 30
+  function_name = "${local.namespace}-pdf_generator"
+  filename      = data.archive_file.pdf_generator.output_path
+  role          = aws_iam_role.pdf_generator_lambda.arn
+  handler       = "index.handler"
+  runtime       = "nodejs20.x"
+  s3_bucket     = module.vic_s3_private.bucket
+  s3_key        = aws_s3_object.pdf_generator.key
+  memory_size   = 512
+  timeout       = 30
 
   vpc_config {
     subnet_ids         = module.subnets.private_subnet_ids
