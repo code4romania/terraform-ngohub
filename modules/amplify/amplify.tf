@@ -45,7 +45,7 @@ resource "aws_amplify_branch" "this" {
   )
 
   enable_basic_auth      = var.basic_auth_credentials != null
-  basic_auth_credentials = var.basic_auth_credentials ? base64encode(var.basic_auth_credentials) : null
+  basic_auth_credentials = var.basic_auth_credentials != null ? base64encode(var.basic_auth_credentials) : null
 }
 
 resource "aws_amplify_domain_association" "this" {
