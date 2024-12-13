@@ -6,7 +6,7 @@ data "archive_file" "pdf_generator" {
 
 resource "aws_s3_object" "pdf_generator" {
   bucket = module.vic_s3_private.bucket
-  key    = "lambda/pdf_generator.zip"
+  key    = "lambda/vic/pdf_generator.zip"
   source = data.archive_file.pdf_generator.output_path
 }
 
