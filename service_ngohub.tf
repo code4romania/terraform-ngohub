@@ -52,9 +52,11 @@ module "ngohub_frontend" {
   branch      = local.isProduction ? "main" : "develop"
   environment = var.environment
 
+
   frontend_domain = local.ngohub.frontend.domain
 
-  github_access_token = var.github_access_token
+  github_access_token    = var.github_access_token
+  basic_auth_credentials = local.isProduction ? null : var.staging_auth_credentials
 
   environment_variables = {
     AMPLIFY_MONOREPO_APP_ROOT      = "frontend"

@@ -295,6 +295,10 @@ module "vic_backend" {
       name  = "SENTRY_DSN"
       value = var.sentry_dsn
     },
+    {
+      name  = "PDF_GENERATOR_LAMBDA_NAME"
+      value = aws_lambda_function.pdf_generator.function_name
+    },
   ]
 
   secrets = [
@@ -406,6 +410,16 @@ data "aws_iam_policy_document" "vic_iam_user_policy" {
 
     resources = [
       module.vic_cognito.arn
+    ]
+  }
+
+  statement {
+    actions = [
+      "lambda:InvokeFunction",
+    ]
+
+    resources = [
+      aws_lambda_function.pdf_generator.arn,
     ]
   }
 }

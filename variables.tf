@@ -101,3 +101,10 @@ variable "sentry_dsn" {
   type      = string
   sensitive = true
 }
+
+variable "staging_auth_credentials" {
+  description = "Basic auth credentials for amplify staging environment."
+  type        = string
+  sensitive   = true
+  default     = null
+}

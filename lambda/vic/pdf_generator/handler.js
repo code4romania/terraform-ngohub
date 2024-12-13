@@ -3,7 +3,7 @@ const chromium = require("@sparticuz/chromium");
 const { S3Client, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 
 const s3 = new S3Client({ region: 'eu-west-1' });
-const S3_BUCKET = 'vic-staging-private-enid';
+const S3_BUCKET = process.env.S3_BUCKET;
 
 chromium.setHeadlessMode = true;
 
