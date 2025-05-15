@@ -96,7 +96,7 @@ module "ngohub_backend" {
 
   name         = local.ngohub.namespace
   cluster_name = module.ecs_cluster.cluster_name
-  min_capacity = 1
+  min_capacity = 3
   max_capacity = 9
 
   image_repo = local.ngohub.backend.image.repo
