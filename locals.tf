@@ -24,7 +24,7 @@ locals {
       domain = "api${local.env_suffix}.${var.root_domain}"
       image = {
         repo = data.aws_ecr_repository.ngohub_backend.repository_url
-        tag  = "2.0.2"
+        tag  = "2.0.3"
       }
     }
 
