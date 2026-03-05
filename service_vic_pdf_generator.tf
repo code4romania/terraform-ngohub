@@ -14,7 +14,7 @@ resource "aws_lambda_function" "pdf_generator" {
   function_name = "${local.namespace}-pdf_generator"
   role          = aws_iam_role.pdf_generator_lambda.arn
   handler       = "index.handler"
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs24.x"
   s3_bucket     = module.vic_s3_private.bucket
   s3_key        = aws_s3_object.pdf_generator.key
   memory_size   = 512
