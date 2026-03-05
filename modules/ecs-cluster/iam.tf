@@ -14,11 +14,6 @@ resource "aws_iam_role" "ecs" {
   name               = "${var.name}-ecs-instance"
   path               = var.iam_path
   assume_role_policy = data.aws_iam_policy_document.ecs.json
-  managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role",
-    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-    "arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy"
-  ]
 
   tags = var.tags
 }
@@ -26,4 +21,19 @@ resource "aws_iam_role" "ecs" {
 resource "aws_iam_instance_profile" "ecs" {
   name = "${var.name}-ecs-instance"
   role = aws_iam_role.ecs.name
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_ec2role" {
+  role       = aws_iam_role.ecs.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_ssm" {
+  role       = aws_iam_role.ecs.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_cloudwatch" {
+  role       = aws_iam_role.ecs.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy"
 }
