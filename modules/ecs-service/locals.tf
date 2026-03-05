@@ -8,7 +8,7 @@ locals {
     "logDriver" : "awslogs",
     "options" : {
       "awslogs-group" : var.log_group_name,
-      "awslogs-region" : data.aws_region.current.name,
+      "awslogs-region" : data.aws_region.current.region,
       "awslogs-stream-prefix" : var.name
     }
   }
