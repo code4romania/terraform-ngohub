@@ -5,7 +5,7 @@ resource "aws_lambda_function" "amplify_login_create_auth_challenge" {
   filename         = var.amplify_login_create_auth_challenge.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs24.x"
   source_code_hash = var.amplify_login_create_auth_challenge.output_base64sha256
 }
 
@@ -25,7 +25,7 @@ resource "aws_lambda_function" "amplify_login_define_auth_challenge" {
   filename         = var.amplify_login_define_auth_challenge.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs24.x"
   source_code_hash = var.amplify_login_define_auth_challenge.output_base64sha256
 }
 
@@ -45,7 +45,7 @@ resource "aws_lambda_function" "amplify_login_verify_auth_challenge_response" {
   filename         = var.amplify_login_verify_auth_challenge_response.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs24.x"
   source_code_hash = var.amplify_login_verify_auth_challenge_response.output_base64sha256
 }
 
@@ -65,7 +65,7 @@ resource "aws_lambda_function" "amplify_login_custom_message" {
   filename         = var.amplify_login_custom_message.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs24.x"
   source_code_hash = var.amplify_login_custom_message.output_base64sha256
 
   environment {
@@ -93,7 +93,7 @@ resource "aws_lambda_function" "login_pre_authentication_check" {
   filename         = var.login_pre_authentication_check.output_path
   role             = aws_iam_role.amplify_login_lambda.arn
   handler          = "index.handler"
-  runtime          = "nodejs16.x"
+  runtime          = "nodejs24.x"
   source_code_hash = var.login_pre_authentication_check.output_base64sha256
 
   environment {
