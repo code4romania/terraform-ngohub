@@ -293,7 +293,7 @@ module "vic_backend" {
     },
     {
       name  = "SENTRY_DSN"
-      value = var.sentry_dsn
+      value = var.sentry_dsn_vic
     },
     {
       name  = "PDF_GENERATOR_LAMBDA_NAME"

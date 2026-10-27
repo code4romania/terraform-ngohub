@@ -7,6 +7,7 @@ terraform {
   }
 
   cloud {
+    hostname     = "terrakube-api.serval-mark.ts.net"
     organization = "code4romania"
 
     workspaces {
