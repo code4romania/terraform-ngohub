@@ -2,11 +2,7 @@
 
 const { getForgotPasswordEmailTemplate, getForgotPasswordEmailTitle, getInviteUserEmailTemplate, getInviteUserEmailTitle } = require('./email_template_gen');
 
-exports.handler = async (event, context, callback) => {
-  if (event.request.clientMetadata) {
-    ({ appId, appName, appLink, region, environment } = event.request.clientMetadata);
-  }
-
+exports.handler = async (event) => {
   const inviteLink = process.env.onghub_frontend_url;
   const contactEmail = process.env.email_contact;
   const emailAssetsUrl = process.env.email_assets_url;
@@ -25,6 +21,5 @@ exports.handler = async (event, context, callback) => {
     };
   }
 
-  callback(null, event);
   return event;
 };
