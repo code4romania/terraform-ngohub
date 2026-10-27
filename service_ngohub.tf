@@ -222,7 +222,7 @@ module "ngohub_backend" {
     },
     {
       name  = "SENTRY_DSN"
-      value = "https://4fd4562bbb7f94e16b3f79c4f96b6237@o375441.ingest.us.sentry.io/4507502912012288"
+      value = var.sentry_dsn_ngohub
     },
   ]
 
