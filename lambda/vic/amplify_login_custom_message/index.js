@@ -2,7 +2,7 @@
 
 const { getForgotPasswordEmailTemplate, getForgotPasswordEmailTitle, getInviteUserEmailTemplate, getInviteUserEmailTitle } = require('./email_template_gen');
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event) => {
 
   const contactEmail = process.env.email_contact;
   const emailAssetsUrl = process.env.email_assets_url;
@@ -22,6 +22,5 @@ exports.handler = async (event, context, callback) => {
     };
   }
 
-  callback(null, event);
   return event;
 };
