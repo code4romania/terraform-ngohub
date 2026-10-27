@@ -97,9 +97,16 @@ variable "ngohub_landing_url" {
   default     = null
 }
 
-variable "sentry_dsn" {
+variable "sentry_dsn_ngohub" {
   type      = string
   sensitive = true
+  default   = null
+}
+
+variable "sentry_dsn_vic" {
+  type      = string
+  sensitive = true
+  default   = null
 }
 
 variable "staging_auth_credentials" {
