@@ -115,7 +115,6 @@ module "vic_frontend" {
     VITE_APP_FRONTEND_URL = "https://${local.vic.frontend.domain}"
 
     # VIC 2.0: own authentication (magic link), no Cognito on the web
-    VITE_TURNSTILE_SITE_KEY     = var.vic_turnstile_site_key
     VITE_APP_STORE_URL          = var.vic_app_store_url
     VITE_PLAY_STORE_URL         = var.vic_play_store_url
     VITE_MIGRATION_NOTICE_UNTIL = var.vic_migration_notice_until
@@ -399,10 +398,6 @@ module "vic_backend" {
       valueFrom = "${aws_secretsmanager_secret.vic_auth.arn}:auth_token_key::"
     },
     {
-      name      = "TURNSTILE_SECRET"
-      valueFrom = "${aws_secretsmanager_secret.vic_auth.arn}:turnstile_secret::"
-    },
-    {
       name      = "APPLE_PRIVATE_KEY"
       valueFrom = "${aws_secretsmanager_secret.vic_auth.arn}:apple_private_key::"
     },
@@ -433,7 +428,6 @@ resource "aws_secretsmanager_secret_version" "vic_auth" {
     jwt_private_key         = var.vic_jwt_private_key
     jwt_public_key          = var.vic_jwt_public_key
     auth_token_key          = var.vic_auth_token_key
-    turnstile_secret        = var.vic_turnstile_secret
     apple_private_key       = var.vic_apple_private_key
     maintenance_allowed_ips = var.vic_maintenance_allowed_ips
   })

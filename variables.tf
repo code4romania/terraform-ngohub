@@ -140,17 +140,6 @@ variable "vic_auth_token_key" {
   sensitive   = true
 }
 
-variable "vic_turnstile_secret" {
-  description = "Cloudflare Turnstile secret for the VIC NGO registration form."
-  type        = string
-  sensitive   = true
-}
-
-variable "vic_turnstile_site_key" {
-  description = "Cloudflare Turnstile site key for the VIC web app."
-  type        = string
-}
-
 variable "vic_google_client_ids" {
   description = "Google OAuth client ids accepted by the VIC backend, comma separated (iOS, Android, web)."
   type        = string
