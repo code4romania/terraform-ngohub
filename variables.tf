@@ -143,7 +143,6 @@ variable "vic_auth_token_key" {
 variable "vic_google_client_ids" {
   description = "Google OAuth client ids accepted by the VIC backend, comma separated (iOS, Android, web)."
   type        = string
-  default     = ""
 }
 
 variable "vic_apple_bundle_id" {
@@ -192,30 +191,25 @@ variable "vic_migration_notice_until" {
 variable "vic_google_web_client_id" {
   description = "Google OAuth web client id used by the VIC web app (Google sign-in button)."
   type        = string
-  default     = ""
 }
 
 variable "vic_apple_services_id" {
   description = "Apple Services ID for Sign in with Apple on the VIC web app."
   type        = string
-  default     = ""
 }
 
 variable "vic_apple_team_id" {
   description = "Apple Developer team id (Sign in with Apple)."
   type        = string
-  default     = ""
 }
 
 variable "vic_apple_key_id" {
   description = "Key id of the Sign in with Apple private key."
   type        = string
-  default     = ""
 }
 
 variable "vic_apple_private_key" {
-  description = "Sign in with Apple private key (.p8), PEM."
+  description = "Sign in with Apple private key (.p8), base64 encoded on one line."
   type        = string
   sensitive   = true
-  default     = ""
 }
