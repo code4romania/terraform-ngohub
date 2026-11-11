@@ -114,11 +114,16 @@ module "vic_frontend" {
     VITE_API_URL          = "https://${local.vic.backend.domain}"
     VITE_APP_FRONTEND_URL = "https://${local.vic.frontend.domain}"
 
-    # NGO Hub User Pool for VIC Client
-    VITE_AWS_REGION           = var.region
-    VITE_COGNITO_OAUTH_DOMAIN = module.ngohub_cognito.oauth_domain
-    VITE_USER_POOL_CLIENT_ID  = aws_cognito_user_pool_client.vic_ngohub_client.id
-    VITE_USER_POOL_ID         = module.ngohub_cognito.user_pool_id
+    # VIC 2.0: own authentication (magic link), no Cognito on the web
+    VITE_APP_STORE_URL          = var.vic_app_store_url
+    VITE_PLAY_STORE_URL         = var.vic_play_store_url
+    VITE_MIGRATION_NOTICE_UNTIL = var.vic_migration_notice_until
+    VITE_GOOGLE_CLIENT_ID       = var.vic_google_web_client_id
+    VITE_APPLE_SERVICES_ID      = var.vic_apple_services_id
+    VITE_APPLE_REDIRECT_URI     = "https://${local.vic.frontend.domain}/login"
+    VITE_TERMS_URL              = "https://www.ngohub.ro/ro/termeni-si-conditii"
+    VITE_PRIVACY_URL            = "https://www.ngohub.ro/ro/politica-de-confidentialitate"
+    VITE_HELP_CENTER_URL        = "https://www.ngohub.ro/ro/vic"
   }
 
   build_spec = <<-EOT
@@ -200,10 +205,6 @@ module "vic_backend" {
       value = "https://${local.vic.frontend.domain}"
     },
     {
-      name  = "ONG_HUB_API"
-      value = "https://${local.ngohub.backend.domain}/"
-    },
-    {
       name  = "NODE_ENV"
       value = var.environment
     },
@@ -218,30 +219,6 @@ module "vic_backend" {
     {
       name  = "DATABASE_NAME"
       value = "vic"
-    },
-    {
-      name  = "COGNITO_CLIENT_ID_MOBILE"
-      value = module.vic_cognito.user_pool_client_id
-    },
-    {
-      name  = "COGNITO_USER_POOL_ID_MOBILE"
-      value = module.vic_cognito.user_pool_id
-    },
-    {
-      name  = "COGNITO_REGION_MOBILE"
-      value = var.region
-    },
-    {
-      name  = "COGNITO_CLIENT_ID_WEB"
-      value = module.ngohub_cognito.user_pool_client_id
-    },
-    {
-      name  = "COGNITO_USER_POOL_ID_WEB"
-      value = module.ngohub_cognito.user_pool_id
-    },
-    {
-      name  = "COGNITO_REGION_WEB"
-      value = var.region
     },
     {
       name  = "MAIL_HOST"
@@ -272,8 +249,9 @@ module "vic_backend" {
       value = 600
     },
     {
-      name  = "THROTTLE_TTL"
-      value = 60
+      name = "THROTTLE_TTL"
+      # milliseconds (@nestjs/throttler v6); VIC 2.0 refuses values under 1000
+      value = 60000
     },
     {
       name  = "CACHE_TTL"
@@ -298,6 +276,71 @@ module "vic_backend" {
     {
       name  = "PDF_GENERATOR_LAMBDA_NAME"
       value = aws_lambda_function.pdf_generator.function_name
+    },
+    # VIC 2.0: own authentication (replaces the COGNITO_* variables and ONG_HUB_API)
+    {
+      name  = "JWT_KEY_ID"
+      value = var.vic_jwt_key_id
+    },
+    {
+      name  = "JWT_ACCESS_TTL_SECONDS"
+      value = 900
+    },
+    {
+      name  = "REFRESH_TTL_DAYS_WEB"
+      value = 7
+    },
+    {
+      name  = "REFRESH_TTL_DAYS_MOBILE"
+      value = 30
+    },
+    {
+      name  = "WEB_APP_URL"
+      value = "https://${local.vic.frontend.domain}"
+    },
+    {
+      name  = "CORS_ORIGINS"
+      value = join(",", compact(["https://${local.vic.frontend.domain}", var.environment != "production" ? "http://localhost:5173" : null]))
+    },
+    {
+      name  = "MOBILE_MIN_VERSION"
+      value = var.vic_mobile_min_version
+    },
+    {
+      name  = "MAINTENANCE_MODE"
+      value = var.vic_maintenance_mode
+    },
+    {
+      name  = "GOOGLE_CLIENT_IDS"
+      value = var.vic_google_client_ids
+    },
+    {
+      name  = "APPLE_BUNDLE_ID"
+      value = var.vic_apple_bundle_id
+    },
+    {
+      name  = "APPLE_SERVICES_ID"
+      value = var.vic_apple_services_id
+    },
+    {
+      name  = "APPLE_TEAM_ID"
+      value = var.vic_apple_team_id
+    },
+    {
+      name  = "APPLE_KEY_ID"
+      value = var.vic_apple_key_id
+    },
+    {
+      name  = "APPLE_WEB_REDIRECT_URI"
+      value = "https://${local.vic.frontend.domain}/login"
+    },
+    {
+      name  = "AWS_S3_PUBLIC_BASE_URL"
+      value = "https://${module.vic_s3_public.bucket_regional_domain_name}"
+    },
+    {
+      name  = "REDIS_KEY_PREFIX"
+      value = "vic:"
     },
   ]
 
@@ -342,14 +385,53 @@ module "vic_backend" {
       name      = "EXPO_PUSH_NOTIFICATIONS_ACCESS_TOKEN"
       valueFrom = aws_secretsmanager_secret.expo_push_notifications_access_token.arn
     },
+    # VIC 2.0: own authentication
+    {
+      name      = "JWT_PRIVATE_KEY"
+      valueFrom = "${aws_secretsmanager_secret.vic_auth.arn}:jwt_private_key::"
+    },
+    {
+      name      = "JWT_PUBLIC_KEY"
+      valueFrom = "${aws_secretsmanager_secret.vic_auth.arn}:jwt_public_key::"
+    },
+    {
+      name      = "AUTH_TOKEN_KEY"
+      valueFrom = "${aws_secretsmanager_secret.vic_auth.arn}:auth_token_key::"
+    },
+    {
+      name      = "APPLE_PRIVATE_KEY"
+      valueFrom = "${aws_secretsmanager_secret.vic_auth.arn}:apple_private_key::"
+    },
+    {
+      name      = "MAINTENANCE_ALLOWED_IPS"
+      valueFrom = "${aws_secretsmanager_secret.vic_auth.arn}:maintenance_allowed_ips::"
+    },
   ]
 
   allowed_secrets = [
     aws_secretsmanager_secret.expo_push_notifications_access_token.arn,
     aws_secretsmanager_secret.encryption_key.arn,
+    aws_secretsmanager_secret.vic_auth.arn,
     aws_secretsmanager_secret.rds.arn,
     module.vic_iam_user.secret_arn,
   ]
+}
+
+# VIC 2.0 own authentication secrets (one JSON secret, read by key in the task definition).
+# JWT keys are PEM, base64 encoded on one line; the auth token key is 32 random bytes, base64.
+resource "aws_secretsmanager_secret" "vic_auth" {
+  name = "${local.vic.namespace}-auth-${random_string.secrets_suffix.result}"
+}
+
+resource "aws_secretsmanager_secret_version" "vic_auth" {
+  secret_id = aws_secretsmanager_secret.vic_auth.id
+  secret_string = jsonencode({
+    jwt_private_key         = var.vic_jwt_private_key
+    jwt_public_key          = var.vic_jwt_public_key
+    auth_token_key          = var.vic_auth_token_key
+    apple_private_key       = var.vic_apple_private_key
+    maintenance_allowed_ips = var.vic_maintenance_allowed_ips
+  })
 }
 
 resource "aws_secretsmanager_secret" "expo_push_notifications_access_token" {

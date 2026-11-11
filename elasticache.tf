@@ -3,7 +3,7 @@ resource "aws_elasticache_cluster" "redis" {
   engine               = "redis"
   node_type            = "cache.t4g.micro"
   num_cache_nodes      = 1
-  parameter_group_name = "default.redis6.x"
+  parameter_group_name = aws_elasticache_parameter_group.redis.name
   engine_version       = "6.x"
   port                 = 6379
   az_mode              = "single-az"
@@ -32,5 +32,17 @@ resource "aws_elasticache_subnet_group" "elasticache_subnet_group" {
 
   tags = {
     access = "private"
+  }
+}
+
+# VIC 2.0 keeps login codes, sessions and rate limits in Redis: keys must not be evicted.
+# The cluster is shared with NGO Hub, so this applies to its cache keys too.
+resource "aws_elasticache_parameter_group" "redis" {
+  name   = "${local.namespace}-redis6"
+  family = "redis6.x"
+
+  parameter {
+    name  = "maxmemory-policy"
+    value = "noeviction"
   }
 }
