@@ -249,7 +249,7 @@ module "vic_backend" {
       value = 600
     },
     {
-      name  = "THROTTLE_TTL"
+      name = "THROTTLE_TTL"
       # milliseconds (@nestjs/throttler v6); VIC 2.0 refuses values under 1000
       value = 60000
     },
