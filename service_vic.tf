@@ -1,3 +1,11 @@
+locals {
+  # VIC 2.0 (own authentication) is on in every environment except production, where the
+  # vic_v2_enabled workspace variable switches it on during the launch window. While it is off,
+  # the VIC task and web build keep the 1.x configuration (Cognito, NGO Hub API, image 1.1.0),
+  # so this branch can be merged to main and applied to production before the launch.
+  vic_v2 = var.vic_v2_enabled != null ? var.vic_v2_enabled : !local.isProduction
+}
+
 module "vic_cognito" {
   source = "./modules/cognito"
 
@@ -108,23 +116,32 @@ module "vic_frontend" {
 
   github_access_token = var.github_access_token
 
-  environment_variables = {
-    AMPLIFY_MONOREPO_APP_ROOT = "frontend"
+  environment_variables = merge(
+    {
+      AMPLIFY_MONOREPO_APP_ROOT = "frontend"
 
-    VITE_API_URL          = "https://${local.vic.backend.domain}"
-    VITE_APP_FRONTEND_URL = "https://${local.vic.frontend.domain}"
-
-    # VIC 2.0: own authentication (magic link), no Cognito on the web
-    VITE_APP_STORE_URL          = var.vic_app_store_url
-    VITE_PLAY_STORE_URL         = var.vic_play_store_url
-    VITE_MIGRATION_NOTICE_UNTIL = var.vic_migration_notice_until
-    VITE_GOOGLE_CLIENT_ID       = var.vic_google_web_client_id
-    VITE_APPLE_SERVICES_ID      = var.vic_apple_services_id
-    VITE_APPLE_REDIRECT_URI     = "https://${local.vic.frontend.domain}/login"
-    VITE_TERMS_URL              = "https://www.ngohub.ro/ro/termeni-si-conditii"
-    VITE_PRIVACY_URL            = "https://www.ngohub.ro/ro/politica-de-confidentialitate"
-    VITE_HELP_CENTER_URL        = "https://www.ngohub.ro/ro/vic"
-  }
+      VITE_API_URL          = "https://${local.vic.backend.domain}"
+      VITE_APP_FRONTEND_URL = "https://${local.vic.frontend.domain}"
+    },
+    local.vic_v2 ? {
+      # VIC 2.0: own authentication (magic link), no Cognito on the web
+      VITE_APP_STORE_URL          = var.vic_app_store_url
+      VITE_PLAY_STORE_URL         = var.vic_play_store_url
+      VITE_MIGRATION_NOTICE_UNTIL = var.vic_migration_notice_until
+      VITE_GOOGLE_CLIENT_ID       = var.vic_google_web_client_id
+      VITE_APPLE_SERVICES_ID      = var.vic_apple_services_id
+      VITE_APPLE_REDIRECT_URI     = "https://${local.vic.frontend.domain}/login"
+      VITE_TERMS_URL              = "https://www.ngohub.ro/ro/termeni-si-conditii"
+      VITE_PRIVACY_URL            = "https://www.ngohub.ro/ro/politica-de-confidentialitate"
+      VITE_HELP_CENTER_URL        = "https://www.ngohub.ro/ro/vic"
+      } : {
+      # VIC 1.x: NGO Hub User Pool for VIC Client
+      VITE_AWS_REGION           = var.region
+      VITE_COGNITO_OAUTH_DOMAIN = module.ngohub_cognito.oauth_domain
+      VITE_USER_POOL_CLIENT_ID  = aws_cognito_user_pool_client.vic_ngohub_client.id
+      VITE_USER_POOL_ID         = module.ngohub_cognito.user_pool_id
+    },
+  )
 
   build_spec = <<-EOT
     version: 1
@@ -199,7 +216,7 @@ module "vic_backend" {
     }
   ]
 
-  environment = [
+  environment = concat([
     {
       name  = "ONGHUB_URL"
       value = "https://${local.vic.frontend.domain}"
@@ -250,8 +267,8 @@ module "vic_backend" {
     },
     {
       name = "THROTTLE_TTL"
-      # milliseconds (@nestjs/throttler v6); VIC 2.0 refuses values under 1000
-      value = 60000
+      # milliseconds (@nestjs/throttler v6); VIC 2.0 refuses values under 1000, 1.x runs with 60
+      value = local.vic_v2 ? 60000 : 60
     },
     {
       name  = "CACHE_TTL"
@@ -342,9 +359,39 @@ module "vic_backend" {
       name  = "REDIS_KEY_PREFIX"
       value = "vic:"
     },
-  ]
+    ], local.vic_v2 ? [] : [
+    # VIC 1.x (Cognito, NGO Hub API): kept until VIC 2.0 is switched on in production
+    {
+      name  = "ONG_HUB_API"
+      value = "https://${local.ngohub.backend.domain}/"
+    },
+    {
+      name  = "COGNITO_CLIENT_ID_MOBILE"
+      value = module.vic_cognito.user_pool_client_id
+    },
+    {
+      name  = "COGNITO_USER_POOL_ID_MOBILE"
+      value = module.vic_cognito.user_pool_id
+    },
+    {
+      name  = "COGNITO_REGION_MOBILE"
+      value = var.region
+    },
+    {
+      name  = "COGNITO_CLIENT_ID_WEB"
+      value = module.ngohub_cognito.user_pool_client_id
+    },
+    {
+      name  = "COGNITO_USER_POOL_ID_WEB"
+      value = module.ngohub_cognito.user_pool_id
+    },
+    {
+      name  = "COGNITO_REGION_WEB"
+      value = var.region
+    },
+  ])
 
-  secrets = [
+  secrets = concat([
     {
       name      = "ENCRYPTION_KEY"
       valueFrom = aws_secretsmanager_secret.encryption_key.arn
@@ -385,6 +432,7 @@ module "vic_backend" {
       name      = "EXPO_PUSH_NOTIFICATIONS_ACCESS_TOKEN"
       valueFrom = aws_secretsmanager_secret.expo_push_notifications_access_token.arn
     },
+    ], local.vic_v2 ? [
     # VIC 2.0: own authentication
     {
       name      = "JWT_PRIVATE_KEY"
@@ -406,7 +454,7 @@ module "vic_backend" {
       name      = "MAINTENANCE_ALLOWED_IPS"
       valueFrom = "${aws_secretsmanager_secret.vic_auth.arn}:maintenance_allowed_ips::"
     },
-  ]
+  ] : [])
 
   allowed_secrets = [
     aws_secretsmanager_secret.expo_push_notifications_access_token.arn,
