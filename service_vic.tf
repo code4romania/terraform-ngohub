@@ -29,8 +29,9 @@ module "vic_cognito" {
   hmac_secret_key = var.ngohub_hmac_secret_key
 
   # Settings this to false enables user felf-service sign-up in Cognito
-  # We don't want this for ngohub, but we do for vic
-  allow_admin_create_user_only = false
+  # We don't want this for ngohub, but we did for vic 1.x. With VIC 2.0 the old store app may still log in
+  # for a transition period (vic_legacy_mobile_until), but no new account can be created through Cognito.
+  allow_admin_create_user_only = local.vic_v2
 
   username_attributes      = ["email", "phone_number"]
   auto_verified_attributes = ["email"]
@@ -358,6 +359,15 @@ module "vic_backend" {
     {
       name  = "REDIS_KEY_PREFIX"
       value = "vic:"
+    },
+    # Old store app (1.0.x) keeps logging in with Cognito until this date; empty = off
+    {
+      name  = "LEGACY_MOBILE_UNTIL"
+      value = var.vic_legacy_mobile_until
+    },
+    {
+      name  = "LEGACY_COGNITO_MOBILE_ISSUER"
+      value = "https://cognito-idp.${var.region}.amazonaws.com/${module.vic_cognito.user_pool_id}"
     },
     ], local.vic_v2 ? [] : [
     # VIC 1.x (Cognito, NGO Hub API): kept until VIC 2.0 is switched on in production

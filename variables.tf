@@ -157,6 +157,12 @@ variable "vic_v2_enabled" {
   default     = null
 }
 
+variable "vic_legacy_mobile_until" {
+  description = "VIC 2.0: the old store app (Cognito login) is accepted until this date (ISO, e.g. 2027-01-15). Empty: off."
+  type        = string
+  default     = ""
+}
+
 variable "vic_v2_image_tag" {
   description = "VIC backend image deployed in production once vic_v2_enabled is true."
   type        = string
