@@ -151,6 +151,24 @@ variable "vic_apple_bundle_id" {
   default     = "org.commitglobal.vic"
 }
 
+variable "vic_v2_enabled" {
+  description = "Run VIC 2.0 (own authentication). Defaults to true outside production and false in production until the launch window."
+  type        = bool
+  default     = null
+}
+
+variable "vic_legacy_mobile_until" {
+  description = "VIC 2.0: the old store app (Cognito login) is accepted until this date (ISO, e.g. 2027-01-15). Empty: off."
+  type        = string
+  default     = ""
+}
+
+variable "vic_v2_image_tag" {
+  description = "VIC backend image deployed in production once vic_v2_enabled is true."
+  type        = string
+  default     = "2.0.0"
+}
+
 variable "vic_mobile_min_version" {
   description = "Oldest VIC mobile app version the API accepts (older apps get 426 and an update screen)."
   type        = string
